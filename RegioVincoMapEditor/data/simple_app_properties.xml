@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This XML file allows us to easily customize the look and language used
+    in our program's user interface. Note that this properties file is only
+    for the standard controls for an app from the SimpleAppFramework, so
+    it would not include things initialized for the workspace, which is
+    customizable.
+-->
+<properties>
+    <property_list>
+        <property name="APP_TITLE"	    value="Map Viewer"></property>
+	<property name="APP_LOGO"	    value="MapViewer.png"></property>
+	<property name="APP_PATH_CSS"	    value="css/"></property>
+	<property name="APP_CSS"	    value="rvme_style.css"></property>
+        
+        <!-- PROGRAM ICON FILES -->
+        <property name="NEW_ICON"	    value="New.png"></property>
+        <property name="LOAD_ICON"	    value="Load.png"></property>
+        <property name="SAVE_ICON"	    value="Save.png"></property>
+        <property name="EXIT_ICON"          value="Exit.png"></property>
+	<property name="EXPORT_ICON"        value="Export.png"></property>
+
+	<!-- EDIT TOOLBAR BUTTONS -->
+        <property name="RENAME_MAP"	  		  value="Rename.png"></property>
+        <property name="ADD_IMAGE"	   		 value="Add.png"></property>
+        <property name="REMOVE" 			value="Remove.png"></property>
+        <property name="CHANGE_BACKGROUND_COLOR"          value="Background.png"></property>
+	<property name="CHANGE_BORDER_COLOR"        	value="Border.png"></property>
+	<property name="RANDOMIZE_MAP_COLORS"	    	value="Random.png"></property>
+        <property name="CHANGE_MAP_DIMENSIONS"	 	   value="Resize.png"></property>
+        <property name="PLAY_ANTHEM"	    		value="Play.png"></property>
+	<property name="PAUSE_ANTHEM"	    		value="Pause.png"></property>
+        <property name="NEXT_BUTTON"	    		value="Next.png"></property>
+	<property name="PREV_BUTTON"	    		value="Prev.png"></property>	
+	<property name="PARENT_DIRECTORY_BUTTON"	value="ParentDirectory.png"></property>	
+	<property name="DATA_FILE_BUTTON"	    	value="DataFile.png"></property>	
+
+	<!-- EDIT TOOLBAR BUTTONS TOOLTIPS -->
+        <property name="RENAME_MAP_TT"	  		  value="Rename Map"></property>
+        <property name="ADD_IMAGE_TT"	   		 value="Add Image"></property>
+        <property name="REMOVE_TT" 			value="Remove Image"></property>
+        <property name="CHANGE_BACKGROUND_COLOR_TT"          value="Change Background Color"></property>
+	<property name="CHANGE_BORDER_COLOR_TT"        	value="Change Border Color"></property>
+	<property name="RANDOMIZE_MAP_COLORS_TT"	    	value="Randomize Map Colors"></property>
+        <property name="CHANGE_MAP_DIMENSIONS_TT"	 	   value="Change Map Dimensions"></property>
+        <property name="PLAY_ANTHEM_TT"	    		value="Play Region Anthem"></property>
+	<property name="PAUSE_ANTHEM_TT"	    		value="Pause Region Anthem"></property>
+        <property name="NEXT_BUTTON_TT"	    		value="Go To Next Subregion"></property>
+        <property name="PREV_BUTTON_TT"	    		value="Go To Previous Subregion"></property>
+        <property name="PREV_BUTTON_TT"	    		value="Go To Previous Subregion"></property>
+        <property name="PARENT_DIRECTORY_BUTTON_TT"	value="Select a Parent Directory"></property>
+        <property name="DATA_FILE_BUTTON_TT"		value="Select a Data File"></property>
+	
+        <!-- TOOLTIPS FOR BUTTONS -->
+        <property name="NEW_TOOLTIP"		value="Create New Map"></property>
+        <property name="LOAD_TOOLTIP"		value="Load a Map"></property>
+        <property name="SAVE_TOOLTIP"		value="Save a Map"></property>
+        <property name="EXIT_TOOLTIP"		value="Exit the Application"></property>
+        <property name="EXPORT_TOOLTIP"		value="Export the Image"></property>
+
+        <!-- ERROR MESSAGES -->
+        <property name="CLOSE_BUTTON_TEXT"              value="Close"></property>
+
+        <property name="NEW_ERROR_MESSAGE"              value="An error occured creating New work."></property>
+        <property name="NEW_ERROR_TITLE"		value="New Work Error"></property>
+        <property name="LOAD_ERROR_MESSAGE"             value="An error occured loading work."></property>
+        <property name="LOAD_ERROR_TITLE"		value="Load Work Error"></property>
+        <property name="SAVE_ERROR_MESSAGE"             value="An error occured saving work."></property>
+        <property name="SAVE_ERROR_TITLE"		value="Save Work Error"></property>
+        <property name="PROPERTIES_LOAD_ERROR_MESSAGE"	value="An error occured loading a properties file."></property>	
+        <property name="PROPERTIES_LOAD_ERROR_TITLE"	value="Properties File Loading Error"></property>
+	
+        <!-- VERIFICATION MESSAGES -->
+	
+        <property name="NEW_COMPLETED_MESSAGE"		value="New Work Ready for Editing"></property>
+        <property name="NEW_COMPLETED_TITLE"		value="New Work Created"></property>
+        <property name="LOAD_COMPLETED_MESSAGE"		value="File Loading Completed and ready for editing"></property>
+        <property name="LOAD_COMPLETED_TITLE"		value="Loading Completed"></property>
+        <property name="SAVE_COMPLETED_MESSAGE"		value="File Saving Completed"></property>
+        <property name="SAVE_COMPLETED_TITLE"		value="Saving Completed"></property>
+        <property name="SAVE_UNSAVED_WORK_MESSAGE"	value="Would you like to save your unsaved work first?"></property>
+        <property name="SAVE_UNSAVED_WORK_TITLE"	value="Save unsaved work?"></property>
+	
+        <property name="NEW_CREATED_MESSAGE"		value="New Work Created but not yet Saved"></property>
+        <property name="WORK_LOADED_MESSAGE"		value="The Work has been Loaded"></property>
+        <property name="WORK_SAVED_MESSAGE"		value="The Work has been Saved"></property>
+        <property name="SAVE_UNSAVED_WORK_MESSAGE"	value="Do you want to save your unsaved work first?"></property>
+	<property name="SAVE_WORK_TITLE"		value="Save your work"></property>
+	<property name="LOAD_WORK_TITLE"		value="Select work file to load"></property>
+	<property name="WORK_FILE_EXT"			value="json"></property>
+	<property name="WORK_FILE_EXT_DESC"		value="Map VIewer Files"></property>
+    </property_list>
+    <property_options_list>
+    </property_options_list>
+</properties>

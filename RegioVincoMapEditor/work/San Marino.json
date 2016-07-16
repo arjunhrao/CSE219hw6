@@ -1,0 +1,118 @@
+
+{
+    "map_name":"San Marino",
+    "parent_directory":"to be set when the new button is pressed, not needed for HW5",
+    "background_color_red":"0.8627451062202454",
+    "background_color_blue":"0.0",
+    "background_color_green":"0.4313725531101227",
+    "border_color_blue":"0.0",
+    "border_color_red":"0.0",
+    "border_color_green":"0.0",
+    "raw_map_path":"./raw_map_data/San Marino.json",
+    "region_flag_image_path":"./export/The World/Europe/San Marino Flag.png",
+    "coat_of_arms_image_path":"./export/The World/Europe/San Marino Coa.png",
+    "map_position_x":0.0,
+    "map_position_y":0.0,
+    "zoom":1000.0,
+    "subregions":[
+        {
+            "subregion_name":"Acquaviva",
+            "capital_name":"",
+            "leader_name":"Lucia Tamagnini",
+            "flag_image_path":"./export/The World/Europe/San Marino/Acquaviva Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Lucia Tamagnini.png",
+            "red":"0.8823529481887817",
+            "blue":"0.8823529481887817",
+            "green":"0.8823529481887817",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Borgo Maggiore",
+            "capital_name":"",
+            "leader_name":"Sergio Nanni",
+            "flag_image_path":"./export/The World/Europe/San Marino/Borgo Maggiore Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Sergio Nanni.png",
+            "red":"0.7843137383460999",
+            "blue":"0.7843137383460999",
+            "green":"0.7843137383460999",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Chiesanuova",
+            "capital_name":"",
+            "leader_name":"Franco Santi",
+            "flag_image_path":"./export/The World/Europe/San Marino/Chiesanuova Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Franco Santi.png",
+            "red":"0.686274528503418",
+            "blue":"0.686274528503418",
+            "green":"0.686274528503418",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Domagnano",
+            "capital_name":"",
+            "leader_name":"Gabriel Guidi",
+            "flag_image_path":"./export/The World/Europe/San Marino/Domagnano Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Gabriel Guidi.png",
+            "red":"0.5882353186607361",
+            "blue":"0.5882353186607361",
+            "green":"0.5882353186607361",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Faetano",
+            "capital_name":"",
+            "leader_name":"Pier Mario Bedetti",
+            "flag_image_path":"./export/The World/Europe/San Marino/Faetano Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Pier Mario Bedetti.png",
+            "red":"0.4901960790157318",
+            "blue":"0.4901960790157318",
+            "green":"0.4901960790157318",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Fiorentino",
+            "capital_name":"",
+            "leader_name":"Gerri Fabbri",
+            "flag_image_path":"./export/The World/Europe/San Marino/Fiorentino Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Gerri Fabbri.png",
+            "red":"0.3921568691730499",
+            "blue":"0.3921568691730499",
+            "green":"0.3921568691730499",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Montegiardino",
+            "capital_name":"",
+            "leader_name":"Marta Fabbri",
+            "flag_image_path":"./export/The World/Europe/San Marino/Montegiardino Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Marta Fabbri.png",
+            "red":"0.29411765933036804",
+            "blue":"0.29411765933036804",
+            "green":"0.29411765933036804",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"City of San Marino",
+            "capital_name":"",
+            "leader_name":"Maria Teresa Beccari",
+            "flag_image_path":"./export/The World/Europe/San Marino/City of San Marino Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Maria Teresa Beccari.png",
+            "red":"0.19607843458652496",
+            "blue":"0.19607843458652496",
+            "green":"0.19607843458652496",
+            "border_thickness":"1.0"
+        },
+        {
+            "subregion_name":"Serravalle",
+            "capital_name":"",
+            "leader_name":"Leandro Maiani",
+            "flag_image_path":"./export/The World/Europe/San Marino/Serravalle Flag.png",
+            "leader_image_path":"./export/The World/Europe/San Marino/Leandro Maiani.png",
+            "red":"0.09803921729326248",
+            "blue":"0.09803921729326248",
+            "green":"0.09803921729326248",
+            "border_thickness":"1.0"
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This XML file allows us to easily customize the look and language used
+    in our program's user interface. Note that this properties file is only
+    for the workspace controls, which are custom for each application
+-->
+<properties>
+    <property_list>    
+        <!-- CONTROLS TEXT -->
+        <property name="RENDER_GRID_LINES_LABEL"       value="Render Grid Lines"></property>
+                        	
+	<!-- ERROR MESSAGES AND TITLES FOR THEIR DIALOGS -->
+	<property name="ATTRIBUTE_UPDATE_ERROR_MESSAGE"	    value="WARNING: An error occured updating the element's attribute."></property>
+	<property name="ATTRIBUTE_UPDATE_ERROR_TITLE"	    value="Attribute Update Error"></property>
+	<property name="UPDATE_ERROR_MESSAGE"		    value="An error occured updating the UI"></property>
+	<property name="UPDATE_ERROR_TITLE"		    value="UI Update Error"></property>
+
+	<!-- DIMENSIONS DIALOG STUFF -->
+	<property name="DIMENSIONS_HEADING"	    value="Dimensions"></property>
+	<property name="WIDTH_PROMPT_LABEL"	    value="Width: "></property>
+	<property name="HEIGHT_PROMPT_LABEL"        value="Height: "></property>
+
+	<!-- EDIT SUBREGION DIALOG STUFF -->
+	<property name="EDIT_SUBREGION_HEADING"	    value="Edit Subregion"></property>	
+	<property name="SUBREGION_NAME_PROMPT_LABEL"	    value="Subregion Name:"></property>
+	<property name="CAPITAL_PROMPT_LABEL"	    value="Capital: "></property>
+	<property name="LEADER_PROMPT_LABEL"        value="Leader: "></property>
+
+	<!-- NEW MAP AND DIALOG STUFF -->
+	<property name="NEW_MAP_HEADING"	    value="New Map"></property>	
+	<property name="MAP_NAME_PROMPT_LABEL"	    value="Map Name:"></property>
+	<property name="PARENT_DIRECTORY_LABEL"	    value="Choose Parent Directory: "></property>
+	<property name="DATA_FILE_LABEL"        value="Choose Data File: "></property>
+
+	<!-- TABLE STUFF -->
+	<property name="SUBREGIONNAME_COLUMN_HEADING"	    value="Subregion Name"></property>
+	<property name="CAPITAL_COLUMN_HEADING"	    value="Capital"></property>
+	<property name="LEADER_COLUMN_HEADING"		    value="Leader"></property>
+    </property_list>
+    <property_options_list>
+    </property_options_list>
+</properties>
