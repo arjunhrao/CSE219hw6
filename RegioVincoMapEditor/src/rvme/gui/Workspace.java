@@ -84,7 +84,13 @@ public class Workspace extends AppWorkspaceComponent {
     Button changeMapDimensionsButton;
     Button playAnthemButton;
     Button pauseAnthemButton;
+    ColorPicker changeBackgroundColorPicker;
+    ColorPicker changeBorderColorPicker;
+    Slider borderThickness;
+    Slider zoomSlider;
     
+    public Slider getBorderThicknessSlider() {return borderThickness;}
+    public Slider getZoomSlider() {return zoomSlider;}
     public Group getMapGroup() {return mapGroup;}
     
     public Workspace(MapEditorApp initApp) {
@@ -126,8 +132,8 @@ public class Workspace extends AppWorkspaceComponent {
         //changeBorderColorButton = app.getGUI().initChildButton(editToolbar, CHANGE_BORDER_COLOR.toString(), CHANGE_BORDER_COLOR_TT.toString(), false);
         //Turns out the above are supposed to be color pickers.
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        ColorPicker changeBackgroundColorPicker = new ColorPicker();
-        ColorPicker changeBorderColorPicker = new ColorPicker();
+        changeBackgroundColorPicker = new ColorPicker();
+        changeBorderColorPicker = new ColorPicker();
         Label bgColorLabel = new Label(props.getProperty(CHANGE_BACKGROUND_COLOR_TT) + ": ");
         Label borderColorLabel = new Label(props.getProperty(CHANGE_BORDER_COLOR_TT) + ": ");
         HBox colorPickingToolbar = new HBox();
@@ -143,12 +149,34 @@ public class Workspace extends AppWorkspaceComponent {
         editToolbar.setVgap(5.0);
 
         //ADDING SLIDERS and their labels
-        Slider borderThickness = new Slider();
-        Slider zoom = new Slider();
+        borderThickness = new Slider();
+        zoomSlider = new Slider();
+        borderThickness.setMin(.005);
+        borderThickness.setMax(.1);
+        zoomSlider.setMin(1.0);
+        zoomSlider.setMax(750.0);
+        
+        borderThickness.setShowTickLabels(true);
+        borderThickness.setShowTickMarks(true);
+        borderThickness.setMajorTickUnit(.025);
+        borderThickness.setMinorTickCount(5);
+        borderThickness.setBlockIncrement(.05);
+        
+        zoomSlider.setShowTickLabels(true);
+        zoomSlider.setShowTickMarks(true);
+        zoomSlider.setMajorTickUnit(249.0);
+        zoomSlider.setMinorTickCount(5);
+        zoomSlider.setBlockIncrement(50.0);
+        
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        borderThickness.setValue(dataManager.getBorderThickness());
+        zoomSlider.setValue(dataManager.getZoom());
+        System.out.println("bt:" + dataManager.getBorderThickness() + " ---- zoom:" + dataManager.getZoom());
+        
         Label borderThicknessLabel = new Label("Border Thickness:");
         Label zoomLabel = new Label("Zoom:");
         HBox sliders = new HBox();
-        sliders.getChildren().addAll(borderThicknessLabel, borderThickness, zoomLabel, zoom);
+        sliders.getChildren().addAll(borderThicknessLabel, borderThickness, zoomLabel, zoomSlider);
         editToolbar.getChildren().addAll(sliders);
         //now add the toolbar to the flowpane. SUCCESS! Although we might want to consider spacing and button size...
         
@@ -227,6 +255,7 @@ public class Workspace extends AppWorkspaceComponent {
     public MapController getMapController() {return mapController;}
     
     public void processHW4Events() {
+        
         changeMapDimensionsButton.setOnAction(e -> {
             //pop up a dimensions dialog
             mapController.processMapDimensions();
@@ -239,6 +268,54 @@ public class Workspace extends AppWorkspaceComponent {
                 mapController.processEditSubregion(it);
             }
         });
+        //now also processes HW6 events!!
+        changeBackgroundColorPicker.setOnAction(e -> {
+            //pop up a dimensions dialog
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            Color c = changeBackgroundColorPicker.getValue();
+            dataManager.setBackgroundColor(c);
+            reloadWorkspace();
+        });
+        changeBorderColorPicker.setOnAction(e -> {
+            //pop up a dimensions dialog
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            Color c = changeBorderColorPicker.getValue();
+            dataManager.setBorderColor(c);
+            reloadWorkspace();
+        });
+        //sliders - did setOnMouseDragged as well as MouseClicked so that any way you manipulate the slider,
+        //the right value changes.
+        borderThickness.setOnMouseDragged(e -> {
+            //pop up a dimensions dialog
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            dataManager.setBorderThickness(borderThickness.getValue());
+            reloadWorkspace();
+        });
+        borderThickness.setOnMouseClicked(e -> {
+            //pop up a dimensions dialog
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            dataManager.setBorderThickness(borderThickness.getValue());
+            reloadWorkspace();
+        });
+        
+        zoomSlider.setOnMouseClicked(e -> {
+            //pop up a dimensions dialog
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            dataManager.setZoom(zoomSlider.getValue());
+            reloadWorkspace();
+        });
+        zoomSlider.setOnMouseDragged(e -> {
+            //pop up a dimensions dialog
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            dataManager.setZoom(zoomSlider.getValue());
+            reloadWorkspace();
+        });
+        
+        randomizeMapColorsButton.setOnAction(e -> {
+            //pop up a dimensions dialog
+            mapController.processRandomizeMapColors();
+        });
+        
         //app.getGUI().getNewButton().setOnAction(e -> {
             //mapController.processNewRequest();
         //});
@@ -358,12 +435,12 @@ public class Workspace extends AppWorkspaceComponent {
         double h = app.getGUI().getPrimaryScene().getHeight()/2+30;
         double w = app.getGUI().getPrimaryScene().getWidth()/4;
         
-        System.out.println("h and w shouldn't change");
-        System.out.println(h);
-        System.out.println(w);
+        //System.out.println("h and w shouldn't change");
+        //System.out.println(h);
+        //System.out.println(w);
         
-        System.out.println("yTranslate:" + mapGroup.getTranslateY());
-        System.out.println("xTrans" + mapGroup.getTranslateX());
+        //System.out.println("yTranslate:" + mapGroup.getTranslateY());
+        //System.out.println("xTrans" + mapGroup.getTranslateX());
         
         while (Math.abs((h - mapGroup.localToScene(circle.getCenterX(), circle.getCenterY()).getY())) > 5) {
             if (h < mapGroup.localToScene(circle.getCenterX(), circle.getCenterY()).getY())
@@ -382,11 +459,11 @@ public class Workspace extends AppWorkspaceComponent {
         }
         
         
-        System.out.println("yTranslate post-centering:" + mapGroup.getTranslateY());
-        System.out.println("xTrans" + mapGroup.getTranslateX());
-        System.out.println("circle center:" + centerXNew + "," + centerYNew);
-        System.out.println("mapGroup toScene:" + mapGroup.localToScene(circle.getCenterX(), circle.getCenterY()));
-        System.out.println("stackPane toScene:" + stackPane.localToScene(circle.getCenterX(), circle.getCenterY()));
+        //System.out.println("yTranslate post-centering:" + mapGroup.getTranslateY());
+        //System.out.println("xTrans" + mapGroup.getTranslateX());
+        //System.out.println("circle center:" + centerXNew + "," + centerYNew);
+        //System.out.println("mapGroup toScene:" + mapGroup.localToScene(circle.getCenterX(), circle.getCenterY()));
+        //System.out.println("stackPane toScene:" + stackPane.localToScene(circle.getCenterX(), circle.getCenterY()));
         
         if (firstZoomCheck) {
             //mapGroup.setTranslateX(mapGroup.getTranslateY()-5);
@@ -429,9 +506,30 @@ public class Workspace extends AppWorkspaceComponent {
         mapGroup.getChildren().clear();
         imagePane.getChildren().clear();
         barPane.getChildren().clear();
-        //add the polygons
         
+        //update slider values
+        if (dataManager.getFirstLoadForSliders()) {
+            zoomSlider.setValue(dataManager.getZoom());
+            dataManager.setFirstLoadForSliders(false);
+            System.out.println(dataManager.getFirstLoadForSliders());
+        }
+        
+        dataManager.setZoom(zoomSlider.getValue());
+        dataManager.setBorderThickness(borderThickness.getValue());
+        for (SubRegion sub: dataManager.getSubregions()) {
+            sub.setSubregionBorderThickness(borderThickness.getValue());
+        }
+        //add the polygons
+        Color tempBorderColor = dataManager.getBorderColor();
+        String hexBorderColorString = String.format( "#%02X%02X%02X",
+            (int)( tempBorderColor.getRed() * 255 ),
+            (int)( tempBorderColor.getGreen() * 255 ),
+            (int)( tempBorderColor.getBlue() * 255 ) );
         for (Polygon poly: dataManager.getPolygonList()) {
+          //use the right color
+          poly.setStroke(Paint.valueOf(hexBorderColorString));
+          //use the right width
+          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
           
           mapGroup.getChildren().addAll(poly);
           
@@ -457,11 +555,11 @@ public class Workspace extends AppWorkspaceComponent {
         //System.out.println(dataManager.getSubregions().size());
         
         changePolygonColors();
+        //changeBorderColor();
         
         
         //now set up the two necessary images where they need to be
         String imagePath = dataManager.getCoatOfArmsImagePath();
-        System.out.println(dataManager.getCoatOfArmsImagePath());
         String imagePath2 = dataManager.getRegionFlagImagePath();
         if (!imagePath.equals("")) {
             
@@ -469,14 +567,14 @@ public class Workspace extends AppWorkspaceComponent {
             ImageView im = new ImageView(image);
             
             imagePane.getChildren().add(im);
-            im.relocate(5, 5);
+            im.relocate(dataManager.getCoatOfArmsImagePos().getX(), dataManager.getCoatOfArmsImagePos().getY());
         }
         if (!imagePath2.equals("")) {
             Image image = new Image("file:" + imagePath2);
             ImageView im = new ImageView(image);
             
             imagePane.getChildren().add(im);
-            im.relocate(400, 450);
+            im.relocate(dataManager.getFlagImagePos().getX(), dataManager.getFlagImagePos().getY());
         }
         //now take a snapshot
         
@@ -512,8 +610,10 @@ public class Workspace extends AppWorkspaceComponent {
     
     public void changePolygonColors() {
         DataManager dataManager = (DataManager)app.getDataComponent();
-        
-        for (int k = 0; k < dataManager.getPolygonList().size(); k++) {
+        int adder = 0;
+        //above int marks how many extra polygons we are at in the numPolygonsList
+        //System.out.println(dataManager.getSubregions().size());
+        for (int k = 0; k < dataManager.getSubregions().size(); k++) {
             //given time i should put this into my filemanager (loading +colors, meaning load datamanager info before polygons)
             //if (dataManager.getSubregions().get(k) == null || dataManager.getPolygonList().get(k) == null)
                 //break;
@@ -522,77 +622,27 @@ public class Workspace extends AppWorkspaceComponent {
                 (int)( tempColor2.getRed() * 255 ),
                 (int)( tempColor2.getGreen() * 255 ),
                 (int)( tempColor2.getBlue() * 255 ) );
-            dataManager.getPolygonList().get(k).setFill(Paint.valueOf(hexColorString2));
-            //System.out.println(k + ":" + hexColorString2);
-            if (dataManager.getSubregions().size() != dataManager.getPolygonList().size() && k == 7) {
-                dataManager.getPolygonList().get(8).setFill(Paint.valueOf(hexColorString2));
-                break;
+            dataManager.getPolygonList().get(k+adder).setFill(Paint.valueOf(hexColorString2));
+            //System.out.println((k+adder) + ":" + hexColorString2);
+            //System.out.println("---" + (dataManager.getNumPolygonsList().get(k)-1));
+            for (int i = 0; i < dataManager.getNumPolygonsList().get(k)-1; i++) {
+                //System.out.println(" this is i: " + i);
+                dataManager.getPolygonList().get(k+adder+1).setFill(Paint.valueOf(hexColorString2));
+                adder++;
+                //System.out.println("****" + (k+adder) + ":" + hexColorString2);
             }
+            
         }
         
     }
     
-    
-    //adds lines to the renderPane
-    public void addLines(Boolean bool) {
-        //NOTE: the renderPane does not have a width or height (default 0.0) until it is rendered.
-        //I started the map default with gridlines off because it renders it once and then the toggling
-        //works fine. Hopefully this is fine (I don't see why it wouldn't be).
-        
-        //renderPane.addLines
-        Group group = new Group();
-        double foo;
-        //add longitudes
-        for (int j = 0; j < 13; j++) {
-            foo = 0.0;
-            Line line = new Line();
-            //if not the prime meridian, make it dashed
-            if (j != 6 && j != 0 && j != 12) {
-                line.getStrokeDashArray().addAll(2d,20d);
-                line.setStroke(Paint.valueOf("#999999"));
-            } else {
-                line.setStroke(Paint.valueOf("#FAEBD7"));
-            }
-            //if first or last, move it a little inwards to avoid expanding the renderPane
-            if (j == 0)
-                foo = 0.01;
-            if (j==12)
-                foo = -0.01;
-
-            line.setStartX((double)((double)((double)j+foo)/12.0*renderPane.getWidth()));
-            line.setStartY(0.02f);
-            line.setEndX((double)((double)((double)j+foo)/12.0*renderPane.getWidth()));
-            line.setEndY(renderPane.getHeight()-.02);
-            group.getChildren().add(line);
-            
-        }
-        
-        //add latitudes
-        for (int j = 0; j < 7; j++) {
-            Line line = new Line();
-            foo = 0.0;
-            //if not the prime meridian, make it dashed
-            
-            if (j != 3) {
-                line.getStrokeDashArray().addAll(2d,20d);
-                line.setStroke(Paint.valueOf("#999999"));
-            } else {
-                line.setStroke(Paint.valueOf("#FAEBD7"));
-            }
-            if (j == 0)
-                foo = 0.01;
-            if (j == 6)
-                foo = -0.01;
-            
-            line.setStartY((double)((double)((double)j+foo)/6.0*(renderPane.getHeight())));
-            line.setStartX(0.02f);
-            line.setEndY((double)((double)((double)j+foo)/6.0*(renderPane.getHeight())));
-            line.setEndX(renderPane.getWidth()-.02);
-            group.getChildren().add(line);
-            
-        }
-        renderPane.getChildren().add(group);
-        group.setVisible(bool);
+    public void changeBorderColor() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        Color tempColor2 = dataManager.getBorderColor();
+        String hexColorString2 = String.format( "#%02X%02X%02X",
+            (int)( tempColor2.getRed() * 255 ),
+            (int)( tempColor2.getGreen() * 255 ),
+            (int)( tempColor2.getBlue() * 255 ) );
     }
     
     public void removeButtons() {

@@ -13,6 +13,10 @@
     "coat_of_arms_image_path":"./export/The World/Europe/Slovakia Coa.png",
     "map_position_x":0.0,
     "map_position_y":0.0,
+    "flag_image_pos_x":400.0,
+    "flag_image_pos_y":450.0,
+    "coa_image_pos_x":5.0,
+    "coa_image_pos_y":5.0,
     "zoom":25.0,
     "subregions":[
         {
@@ -24,7 +28,7 @@
             "red":"0.9803921580314636",
             "blue":"0.9803921580314636",
             "green":"0.9803921580314636",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Trnava",
@@ -35,7 +39,7 @@
             "red":"0.9764705896377563",
             "blue":"0.9764705896377563",
             "green":"0.9764705896377563",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Trencin",
@@ -46,7 +50,7 @@
             "red":"0.9725490212440491",
             "blue":"0.9725490212440491",
             "green":"0.9725490212440491",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Nitra",
@@ -57,7 +61,7 @@
             "red":"0.9686274528503418",
             "blue":"0.9686274528503418",
             "green":"0.9686274528503418",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Zilina",
@@ -68,7 +72,7 @@
             "red":"0.9647058844566345",
             "blue":"0.9647058844566345",
             "green":"0.9647058844566345",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Banska Bystrica",
@@ -79,7 +83,7 @@
             "red":"0.9607843160629272",
             "blue":"0.9607843160629272",
             "green":"0.9607843160629272",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Presov",
@@ -90,7 +94,7 @@
             "red":"0.95686274766922",
             "blue":"0.95686274766922",
             "green":"0.95686274766922",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Kosice",
@@ -101,7 +105,7 @@
             "red":"0.9529411792755127",
             "blue":"0.9529411792755127",
             "green":"0.9529411792755127",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         }
     ]
 }

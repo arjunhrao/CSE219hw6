@@ -165,6 +165,10 @@ public class FileManager implements AppFileComponent {
                 .add("coat_of_arms_image_path", dataManager.getCoatOfArmsImagePath())
                 .add("map_position_x", dataManager.getMapPositionX())
                 .add("map_position_y", dataManager.getMapPositionY())
+                .add("flag_image_pos_x", dataManager.getFlagImagePos().getX())
+                .add("flag_image_pos_y", dataManager.getFlagImagePos().getY())
+                .add("coa_image_pos_x", dataManager.getCoatOfArmsImagePos().getX())
+                .add("coa_image_pos_y", dataManager.getCoatOfArmsImagePos().getY())
                 .add("zoom", dataManager.getZoom())
 		.add("subregions", itemsArray)
 		.build();
@@ -209,6 +213,7 @@ public class FileManager implements AppFileComponent {
             for (Polygon x: temp) {
                 //Polygon y = dataManager.convertPolygon(x);
                 dataManager.addPolygon(x);
+                
             }
 	}
         
@@ -310,6 +315,13 @@ public class FileManager implements AppFileComponent {
         dataManager.setPosY(posY);
         dataManager.setZoom(zoom);
         
+        Double flagPosX = getDataAsDouble(json, "flag_image_pos_x");
+        Double flagPosY = getDataAsDouble(json, "flag_image_pos_y");
+        Double coaPosX = getDataAsDouble(json, "coa_image_pos_x");
+        Double coaPosY = getDataAsDouble(json, "coa_image_pos_y");
+        dataManager.setCoatOfArmsImagePos(coaPosX, coaPosY);
+        dataManager.setFlagImagePos(flagPosX, flagPosY);
+        
         dataManager.setRegionFlagImagePath(json.getString("region_flag_image_path"));
         dataManager.setCoatOfArmsImagePath(json.getString("coat_of_arms_image_path"));
         dataManager.setRawMapPath(json.getString("raw_map_path"));
@@ -323,6 +335,9 @@ public class FileManager implements AppFileComponent {
             temp.setFlagImagePath(subregion.getString("flag_image_path"));
             temp.setLeaderImagePath(subregion.getString("leader_image_path"));
             temp.setSubregionBorderThickness(Double.parseDouble(subregion.getString("border_thickness")));
+            //next small bit sets the overall border thickness to that of the first subregion
+            if (i == 0)
+                dataManager.setBorderThickness(Double.parseDouble(subregion.getString("border_thickness")));
             //add it to the datamanager
 	    dataManager.getSubregions().add(temp);
 	}
@@ -334,6 +349,8 @@ public class FileManager implements AppFileComponent {
     }
     
     public ArrayList<Polygon> loadSubregion(JsonObject obj) {
+        
+        int bizz = 0;
         JsonArray list2 = obj.getJsonArray("SUBREGION_POLYGONS");
         ArrayList<Double> xyCoordinates = new ArrayList<>();
         ArrayList<Polygon> myPolygons = new ArrayList<>();
@@ -362,6 +379,8 @@ public class FileManager implements AppFileComponent {
                 
                 xyCoordinates.add(x);
                 xyCoordinates.add(y);
+                
+                
             }
             
             dataManager.scaleXYCoordinates(xyCoordinates);
@@ -372,7 +391,14 @@ public class FileManager implements AppFileComponent {
             
             xyCoordinates.clear();
             myPolygons.add(p);
+            
+            //bizz will mark how many extra polygons there are. Then it will add that number plus one
+            //to the datamanager's numPolygonsList.
+            //note that slovakia does not have all 1's, but andorra, for example, does.
+            bizz++;
+            
 	}
+        dataManager.getNumPolygonsList().add(bizz);
         return myPolygons;
     }
     
@@ -434,9 +460,9 @@ public class FileManager implements AppFileComponent {
             }
             else {
                 try {
-                    System.out.println(sub.getFlagImagePath());
+                    //System.out.println(sub.getFlagImagePath());
                     Image image = new Image("file:" + sub.getFlagImagePath());
-                    System.out.println(image.getPixelReader().getColor(1,1));
+                    //System.out.println(image.getPixelReader().getColor(1,1));
                 }
                 catch(Exception e) {
                     haveFlags = false;

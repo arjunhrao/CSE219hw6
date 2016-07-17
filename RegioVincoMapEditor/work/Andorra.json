@@ -5,14 +5,18 @@
     "background_color_red":"0.8627451062202454",
     "background_color_blue":"0.0",
     "background_color_green":"0.4313725531101227",
-    "border_color_blue":"0.0",
-    "border_color_red":"0.0",
-    "border_color_green":"0.0",
+    "border_color_blue":"1.0",
+    "border_color_red":"1.0",
+    "border_color_green":"1.0",
     "raw_map_path":"./raw_map_data/Andorra.json",
     "region_flag_image_path":"./export/The World/Europe/Andorra Flag.png",
     "coat_of_arms_image_path":"./export/The World/Europe/Andorra Coa.png",
     "map_position_x":0.0,
     "map_position_y":0.0,
+    "flag_image_pos_x":400.0,
+    "flag_image_pos_y":450.0,
+    "coa_image_pos_x":5.0,
+    "coa_image_pos_y":5.0,
     "zoom":100.0,
     "subregions":[
         {
@@ -24,7 +28,7 @@
             "red":"0.7843137383460999",
             "blue":"0.7843137383460999",
             "green":"0.7843137383460999",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Canillo",
@@ -35,7 +39,7 @@
             "red":"0.7764706015586853",
             "blue":"0.7764706015586853",
             "green":"0.7764706015586853",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Encamp",
@@ -46,7 +50,7 @@
             "red":"0.7686274647712708",
             "blue":"0.7686274647712708",
             "green":"0.7686274647712708",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Escaldes-Engordany",
@@ -57,7 +61,7 @@
             "red":"0.7607843279838562",
             "blue":"0.7607843279838562",
             "green":"0.7607843279838562",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"La Massana",
@@ -68,7 +72,7 @@
             "red":"0.7529411911964417",
             "blue":"0.7529411911964417",
             "green":"0.7529411911964417",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Andorra la Vella",
@@ -79,7 +83,7 @@
             "red":"0.7450980544090271",
             "blue":"0.7450980544090271",
             "green":"0.7450980544090271",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Sant Julia de Loria",
@@ -90,7 +94,7 @@
             "red":"0.7372549176216125",
             "blue":"0.7372549176216125",
             "green":"0.7372549176216125",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         }
     ]
 }

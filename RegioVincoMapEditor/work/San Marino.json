@@ -13,6 +13,10 @@
     "coat_of_arms_image_path":"./export/The World/Europe/San Marino Coa.png",
     "map_position_x":0.0,
     "map_position_y":0.0,
+    "flag_image_pos_x":400.0,
+    "flag_image_pos_y":450.0,
+    "coa_image_pos_x":5.0,
+    "coa_image_pos_y":5.0,
     "zoom":1000.0,
     "subregions":[
         {
@@ -24,7 +28,7 @@
             "red":"0.8823529481887817",
             "blue":"0.8823529481887817",
             "green":"0.8823529481887817",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Borgo Maggiore",
@@ -35,7 +39,7 @@
             "red":"0.7843137383460999",
             "blue":"0.7843137383460999",
             "green":"0.7843137383460999",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Chiesanuova",
@@ -46,7 +50,7 @@
             "red":"0.686274528503418",
             "blue":"0.686274528503418",
             "green":"0.686274528503418",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Domagnano",
@@ -57,7 +61,7 @@
             "red":"0.5882353186607361",
             "blue":"0.5882353186607361",
             "green":"0.5882353186607361",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Faetano",
@@ -68,7 +72,7 @@
             "red":"0.4901960790157318",
             "blue":"0.4901960790157318",
             "green":"0.4901960790157318",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Fiorentino",
@@ -79,7 +83,7 @@
             "red":"0.3921568691730499",
             "blue":"0.3921568691730499",
             "green":"0.3921568691730499",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Montegiardino",
@@ -90,7 +94,7 @@
             "red":"0.29411765933036804",
             "blue":"0.29411765933036804",
             "green":"0.29411765933036804",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"City of San Marino",
@@ -101,7 +105,7 @@
             "red":"0.19607843458652496",
             "blue":"0.19607843458652496",
             "green":"0.19607843458652496",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         },
         {
             "subregion_name":"Serravalle",
@@ -112,7 +116,7 @@
             "red":"0.09803921729326248",
             "blue":"0.09803921729326248",
             "green":"0.09803921729326248",
-            "border_thickness":"1.0"
+            "border_thickness":"0.01"
         }
     ]
 }

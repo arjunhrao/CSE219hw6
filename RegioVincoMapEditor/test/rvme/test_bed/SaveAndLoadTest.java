@@ -102,13 +102,15 @@ public class SaveAndLoadTest {
         dataManager.getSubregions().add(sub7);
         
         dataManager.setBackgroundColor(Color.rgb(220,110,0));
-        dataManager.setBorderColor(Color.BLACK);
+        dataManager.setBorderColor(Color.WHITE);
         dataManager.setMapName("Andorra");
         dataManager.setRawMapPath("./raw_map_data/Andorra.json");
         dataManager.setParentDirectory("to be set when the new button is pressed, not needed for HW5");
         dataManager.setRegionFlagImagePath("./export/The World/Europe/Andorra Flag.png");
         dataManager.setCoatOfArmsImagePath("./export/The World/Europe/Andorra Coa.png");
         dataManager.setZoom(100.0);
+        dataManager.setFlagImagePos(400, 450);
+        dataManager.setCoatOfArmsImagePos(5, 5);
         //the above Coa pic was found online and saved in the data
         
         // SAVE IT TO A FILE
@@ -229,7 +231,9 @@ public class SaveAndLoadTest {
         dataManager.setParentDirectory("to be set when the new button is pressed, not needed for HW5");
         dataManager.setRegionFlagImagePath("./export/The World/Europe/San Marino Flag.png");
         dataManager.setCoatOfArmsImagePath("./export/The World/Europe/San Marino Coa.png");
-        dataManager.setZoom(1000.0);
+        dataManager.setZoom(750.0);
+        dataManager.setFlagImagePos(400, 450);
+        dataManager.setCoatOfArmsImagePos(5, 5);
         //the above Coa pic was found online and saved in the data
         
         // SAVE IT TO A FILE
@@ -345,6 +349,8 @@ public class SaveAndLoadTest {
         dataManager.setRegionFlagImagePath("./export/The World/Europe/Slovakia Flag.png");
         dataManager.setCoatOfArmsImagePath("./export/The World/Europe/Slovakia Coa.png");
         dataManager.setZoom(25.0);
+        dataManager.setFlagImagePos(400, 450);
+        dataManager.setCoatOfArmsImagePos(5, 5);
         //the above Coa pic was found online and saved in the data
         
         // SAVE IT TO A FILE

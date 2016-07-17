@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -20,6 +21,9 @@ import rvme.gui.Workspace;
 public class DataManager implements AppDataComponent {
     MapEditorApp app;
     ArrayList<Polygon> polygonList = new ArrayList<>();
+    //hw6
+    //this arraylist will keep track of how many polygons are in each subregion, going in order (e.g. most should be 1)
+    ArrayList<Integer> numPolygonsList = new ArrayList<>();
     //hw4
     ObservableList<SubRegion> subregions;
     //hw5 - need to add some data values
@@ -28,7 +32,7 @@ public class DataManager implements AppDataComponent {
     String mapName;
     String parentDirectory = "";
     //doubles width and height? and zoom?
-    Double borderThickness = 1.0;
+    Double borderThickness = .01;
     String rawMapPath = "";
     
     Double mapPositionX = 0.0;
@@ -39,6 +43,11 @@ public class DataManager implements AppDataComponent {
     Image regionFlagImage;
     String coatOfArmsImagePath = "";
     Image coatOfArmsImage;
+    //positions for the flags, should be points
+    Point2D flagImagePos = new Point2D(0.0,0.0);
+    Point2D coatOfArmsImagePos = new Point2D(0.0,0.0);
+    
+    boolean firstLoadForSliders = true;
     
     public MapEditorApp getMapEditorApp() {return app;}
     
@@ -53,7 +62,8 @@ public class DataManager implements AppDataComponent {
     public void setZoom(double d) {zoom = d;}
     public void setPosX(double d) {mapPositionX = d;}
     public void setPosY(double d) {mapPositionY = d;}
-    
+    public void setFlagImagePos(double d, double d2) {flagImagePos = new Point2D(d,d2);}
+    public void setCoatOfArmsImagePos(double d, double d2) {coatOfArmsImagePos = new Point2D(d,d2);}
     
     public double getMapPositionX() {return mapPositionX;}
     public double getMapPositionY() {return mapPositionY;}
@@ -66,7 +76,10 @@ public class DataManager implements AppDataComponent {
     public String getRawMapPath() {return rawMapPath;}
     public String getCoatOfArmsImagePath() {return coatOfArmsImagePath;}
     public String getRegionFlagImagePath() {return regionFlagImagePath;}
-    
+    public Point2D getFlagImagePos() {return flagImagePos;}
+    public Point2D getCoatOfArmsImagePos() {return coatOfArmsImagePos;}
+    public boolean getFirstLoadForSliders() {return firstLoadForSliders;}
+    public void setFirstLoadForSliders(boolean x) {firstLoadForSliders = x;}
     
     public DataManager(MapEditorApp initApp) {
         app = initApp;
@@ -80,7 +93,28 @@ public class DataManager implements AppDataComponent {
     public void reset() {
         Workspace workspace = (Workspace)app.getWorkspaceComponent();
         polygonList.clear();
+        numPolygonsList.clear();
         subregions.clear();
+        backgroundColor = Color.web("#0000FF");//blue
+        borderColor = Color.BLACK;
+        mapName = "";
+        parentDirectory = "";
+    
+        borderThickness = .01;
+        rawMapPath = "";
+    
+        mapPositionX = 0.0;
+        mapPositionY = 0.0;
+        zoom = 1.0;
+    
+        regionFlagImagePath = "";
+        coatOfArmsImagePath = "";
+    //positions for the flags, should be points
+        flagImagePos = new Point2D(0.0,0.0);
+        coatOfArmsImagePos = new Point2D(0.0,0.0);
+        
+        firstLoadForSliders = true;
+        
         
         //workspace.getRenderPane().setScaleX(1.0); //change to getMapPane? or don't need at all?
         //workspace.getRenderPane().setScaleY(1.0);
@@ -109,6 +143,9 @@ public class DataManager implements AppDataComponent {
     
     public ArrayList<Polygon> getPolygonList() {
         return polygonList;
+    }
+    public ArrayList<Integer> getNumPolygonsList() {
+        return numPolygonsList;
     }
     
     public void fillPolygons(Paint p) {

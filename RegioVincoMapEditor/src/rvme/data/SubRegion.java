@@ -40,7 +40,7 @@ public class SubRegion {
     String leaderImagePath = "";
     Image leaderImage;
     Image flagImage;
-    Double subregionBorderThickness = 1.0;
+    Double subregionBorderThickness = .01;
     ArrayList<Polygon> subregionPolygonList = new ArrayList<>();
     
     //r,g,b doubles

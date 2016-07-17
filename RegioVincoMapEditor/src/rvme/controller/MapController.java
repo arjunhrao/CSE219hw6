@@ -574,5 +574,12 @@ public class MapController {
         }
         
     }
+
+    public void processRandomizeMapColors() {
+        Workspace workspace = (Workspace)app.getWorkspaceComponent();
+        myManager=(DataManager)app.getDataComponent();
+        //polygons or subregions?
+        
+    }
     
 }
