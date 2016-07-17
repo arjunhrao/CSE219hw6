@@ -5,6 +5,7 @@
  */
 package rvme.controller;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -579,6 +581,22 @@ public class MapController {
         Workspace workspace = (Workspace)app.getWorkspaceComponent();
         myManager=(DataManager)app.getDataComponent();
         //polygons or subregions?
+        //Generate a list of colors that can be used (254 / numberOfSubregions) and assign (randomly) each color to a subregion.
+        ArrayList<Integer> list = new ArrayList<>();
+        int counter = 0;
+        for (SubRegion sub : myManager.getSubregions()) {
+            list.add(counter);
+            counter++;
+        }
+        int spacing = 254 / myManager.getSubregions().size();
+        for (int j = 0; j < myManager.getSubregions().size(); j++) {
+            int temp = 1 + j*spacing;
+            Color c = Color.rgb(temp, temp, temp);
+            int whichSubregion = (int)(Math.random()*list.size());
+            myManager.getSubregions().get(list.get(whichSubregion)).setSubregionColor(c);
+            list.remove(whichSubregion);
+        }
+        workspace.reloadWorkspace();
         
     }
     
