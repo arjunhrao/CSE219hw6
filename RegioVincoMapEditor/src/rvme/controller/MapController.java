@@ -30,6 +30,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Scale;
 import static javafx.scene.transform.Transform.scale;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import properties_manager.PropertiesManager;
 import static rvme.PropertyType.*;
@@ -520,7 +521,7 @@ public class MapController {
     public void processNewMapDialog() throws IOException {
         // ENABLE/DISABLE THE PROPER BUTTONS
 	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	workspace.reloadWorkspace();
+	//workspace.reloadWorkspace();
         myManager=(DataManager)app.getDataComponent();
         
         //need a popup dialogue box with multiple input fields for all of the necessary data
@@ -581,7 +582,9 @@ public class MapController {
             
             createMap();
             
+            System.out.println("createMap() complete");
             
+            //System.out.println(myManager.getPolygonList().size());
             
             
             //enable the save button
@@ -600,11 +603,47 @@ public class MapController {
 	workspace.reloadWorkspace();
         myManager=(DataManager)app.getDataComponent();
         FileManager fileManager = (FileManager)app.getFileComponent();
+        System.out.println("createMap(): " + dataFile.getText());
+        
         fileManager.loadPolygonData(myManager, dataFile.getText());
         
+        System.out.println("loadPolygonData complete");
+        System.out.println("polygonlist size: " + myManager.getPolygonList().size());
+        System.out.println("sr list size: " + myManager.getSubregions().size());
+        System.out.println("numbers for polys size: " + myManager.getNumPolygonsList().size());
+        
+        //create blank subregions
+        for (int j = 0; j < myManager.getNumPolygonsList().size(); j++) {
+            SubRegion sr = new SubRegion("", "", "");
+            myManager.getSubregions().add(sr);
+        }
+        System.out.println("first subregion size:" + myManager.getSubregions().get(0).getPolygonList().size());
+        //add the appropriate polygons
+        addPolygonsToSubregions();
+        System.out.println("first sr size:" + myManager.getSubregions().get(0).getPolygonList().size());
+        System.out.println("last sr size:" + myManager.getSubregions().get(myManager.getSubregions().size()-1).getPolygonList().size());
         workspace.reloadWorkspace();
         
+        System.out.println("reload complete");
         
+        
+    }
+    
+    public void addPolygonsToSubregions() {
+        myManager=(DataManager)app.getDataComponent();
+        int adder = 0;
+        for (int k = 0; k < myManager.getSubregions().size(); k++) {
+            System.out.println("k:" + k + "\n adder:" + adder);
+            myManager.getSubregions().get(k).getPolygonList().add(myManager.getPolygonList().get(k+adder));
+            
+            for (int i = 0; i < myManager.getNumPolygonsList().get(k)-1; i++) {
+                myManager.getSubregions().get(k).getPolygonList().add(myManager.getPolygonList().get(k+adder+1));
+                adder++;
+                System.out.println("****" + (k+adder));
+            }
+            
+            
+        }
     }
 
     public void processRandomizeMapColors() {
@@ -614,6 +653,7 @@ public class MapController {
         //Generate a list of colors that can be used (254 / numberOfSubregions) and assign (randomly) each color to a subregion.
         ArrayList<Integer> list = new ArrayList<>();
         int counter = 0;
+        //add random number from 1 - #subregions
         for (SubRegion sub : myManager.getSubregions()) {
             list.add(counter);
             counter++;
@@ -626,6 +666,7 @@ public class MapController {
             myManager.getSubregions().get(list.get(whichSubregion)).setSubregionColor(c);
             list.remove(whichSubregion);
         }
+        
         workspace.reloadWorkspace();
         
     }
@@ -633,11 +674,17 @@ public class MapController {
     public void setFileButtons() {
         pdButton.setOnAction(e -> {
             //let them choose the parent directory
-            FileChooser fc = new FileChooser();
-            fc.setInitialDirectory(new File("./raw_map_data"));
-            fc.setTitle("Select Your Map Coordinates File");
-            File file = fc.showOpenDialog(null);
+            //FileChooser fc = new FileChooser();
+            //fc.setInitialDirectory(new File("./raw_map_data"));
+            //fc.setTitle("Select Your Map Coordinates File");
+            //File file = fc.showOpenDialog(null);
+            //selectedParentDir = file;
+            DirectoryChooser dc = new DirectoryChooser();
+            dc.setInitialDirectory(new File("./raw_map_data"));
+            dc.setTitle("Select Your Parent DirectoryFile");
+            File file = dc.showDialog(null);
             selectedParentDir = file;
+            
             
             parentDirectory.setText(selectedParentDir.getAbsolutePath());
             //if (selectedFile != null)

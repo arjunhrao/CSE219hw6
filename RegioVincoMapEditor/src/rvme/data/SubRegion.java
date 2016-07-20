@@ -35,7 +35,7 @@ public class SubRegion {
     String leaderName = "";
     String subregionName = "";
     //hw5
-    Color subregionColor = Color.BLACK;
+    Color subregionColor = Color.GREEN;
     String flagImagePath = "";
     String leaderImagePath = "";
     Image leaderImage;

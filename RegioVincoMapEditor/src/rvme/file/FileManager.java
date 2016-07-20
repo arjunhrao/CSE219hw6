@@ -204,9 +204,14 @@ public class FileManager implements AppFileComponent {
 	
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
+        System.out.println(filePath);
         
 	JsonArray list = json.getJsonArray("SUBREGIONS");
+        
+        System.out.println("list size:" + list.size());
+        
 	for (int i = 0; i < list.size(); i++) {
+            System.out.println("what");
 	    JsonObject subregion = list.getJsonObject(i);
 	    ArrayList<Polygon> temp;
             temp = loadSubregion(subregion);

@@ -372,7 +372,12 @@ public class Workspace extends AppWorkspaceComponent {
     
     @Override
     public void newDialog() {
-        mapController.processNewMapDialog();
+        try {
+            //mapController.setFileButtons();
+            mapController.processNewMapDialog();
+        } catch (IOException ex) {
+            System.out.println("An error occurred loading the file.");
+        }
         
     }
     
