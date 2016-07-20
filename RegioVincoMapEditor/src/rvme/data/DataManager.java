@@ -95,7 +95,7 @@ public class DataManager implements AppDataComponent {
         polygonList.clear();
         numPolygonsList.clear();
         subregions.clear();
-        backgroundColor = Color.web("#0000FF");//blue
+        backgroundColor = Color.web("#FFFFFF");//blue
         borderColor = Color.BLACK;
         mapName = "";
         parentDirectory = "";

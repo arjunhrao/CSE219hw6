@@ -5,6 +5,8 @@
  */
 package rvme.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.geometry.Insets;
@@ -34,6 +36,7 @@ import static rvme.PropertyType.*;
 import saf.AppTemplate;
 import rvme.data.DataManager;
 import rvme.data.SubRegion;
+import rvme.file.FileManager;
 import rvme.gui.Workspace;
 import static saf.settings.AppPropertyType.*;
 import static saf.settings.AppStartupConstants.FILE_PROTOCOL;
@@ -59,6 +62,13 @@ public class MapController {
     Circle centerCircle = new Circle(5.0, Paint.valueOf("#000000"));
     double ccX = 0.0;
     double ccY = 0.0;
+    Button pdButton;
+    Button dfButton;
+    TextField mapName;
+    TextField dataFile;
+    TextField parentDirectory;
+    File selectedParentDir;
+    File selectedFile;
     
     public MapController(AppTemplate initApp) {
 	app = initApp;
@@ -103,7 +113,7 @@ public class MapController {
         renderPane.setScaleX(myManager.getZoom());
         renderPane.setScaleY(myManager.getZoom());
         
-
+        
         newX = renderPane.localToScene(circle.getCenterX(), circle.getCenterY()).getX();
         newY = renderPane.localToScene(circle.getCenterX(), circle.getCenterY()).getY();
         //System.out.println(newX);
@@ -507,7 +517,7 @@ public class MapController {
         
     }
 
-    public void processNewMapDialog() {
+    public void processNewMapDialog() throws IOException {
         // ENABLE/DISABLE THE PROPER BUTTONS
 	Workspace workspace = (Workspace)app.getWorkspaceComponent();
 	workspace.reloadWorkspace();
@@ -533,9 +543,9 @@ public class MapController {
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(20, 150, 10, 10));
         
-        TextField mapName = new TextField();
-        TextField parentDirectory = new TextField();
-        TextField dataFile = new TextField();
+        mapName = new TextField();
+        parentDirectory = new TextField();
+        dataFile = new TextField();
 
         //creating labels and buttons and formatting them
         Label mapNameLabel = new Label(props.getProperty(MAP_NAME_PROMPT_LABEL));
@@ -548,8 +558,11 @@ public class MapController {
         FlowPane df = new FlowPane();
         pd.getChildren().addAll(parentDirectoryLabel, parentDirectory);
         df.getChildren().addAll(dataFileLabel, dataFile);
-        Button pdButton = app.getGUI().initChildButton(pd, PARENT_DIRECTORY_BUTTON.toString(), PARENT_DIRECTORY_BUTTON_TT.toString(), false);
-        Button dfButton = app.getGUI().initChildButton(df, DATA_FILE_BUTTON.toString(), DATA_FILE_BUTTON_TT.toString(), false);
+        pdButton = app.getGUI().initChildButton(pd, PARENT_DIRECTORY_BUTTON.toString(), PARENT_DIRECTORY_BUTTON_TT.toString(), false);
+        dfButton = app.getGUI().initChildButton(df, DATA_FILE_BUTTON.toString(), DATA_FILE_BUTTON_TT.toString(), false);
+        
+        setFileButtons();
+        
         
         //FileChooser fc = new FileChooser();
         
@@ -563,17 +576,34 @@ public class MapController {
         Optional<ButtonType> result = dialog.showAndWait();
         
         if (result.isPresent() && result.get() == okButtonType) {
-            //set and save the data to myItem and add it to the arraylist in the datamanager obj myManager
-            //use mysubregion? check the other controller
+            //you pressed ok. Your files and textfields should have changed.
+            //Now, you need to create the map using the file.
+            
+            createMap();
+            
+            
+            
             
             //enable the save button
-            //HW4: app.getGUI().getSaveButton().setDisable(false);
+            app.getGUI().getSaveButton().setDisable(false);
             
             changesMade();
             //update the workspace / table
             workspace.reloadWorkspace();
             //useless line of code: app.getWorkspaceComponent().getWorkspace().getChildren().clear();
         }
+        
+    }
+    
+    public void createMap() throws IOException {
+        Workspace workspace = (Workspace)app.getWorkspaceComponent();
+	workspace.reloadWorkspace();
+        myManager=(DataManager)app.getDataComponent();
+        FileManager fileManager = (FileManager)app.getFileComponent();
+        fileManager.loadPolygonData(myManager, dataFile.getText());
+        
+        workspace.reloadWorkspace();
+        
         
     }
 
@@ -600,4 +630,31 @@ public class MapController {
         
     }
     
+    public void setFileButtons() {
+        pdButton.setOnAction(e -> {
+            //let them choose the parent directory
+            FileChooser fc = new FileChooser();
+            fc.setInitialDirectory(new File("./raw_map_data"));
+            fc.setTitle("Select Your Map Coordinates File");
+            File file = fc.showOpenDialog(null);
+            selectedParentDir = file;
+            
+            parentDirectory.setText(selectedParentDir.getAbsolutePath());
+            //if (selectedFile != null)
+                //okbtn.setDisable(false);
+            
+        });
+        
+        dfButton.setOnAction(e -> {
+            //let them choose the parent directory
+            FileChooser fc = new FileChooser();
+            fc.setInitialDirectory(new File("./raw_map_data"));
+            fc.setTitle("Select Your Map Coordinates File");
+            File file = fc.showOpenDialog(null);
+            selectedFile = file;
+            
+            dataFile.setText(selectedFile.getAbsolutePath());
+            
+        });
+    }
 }
