@@ -93,6 +93,15 @@ public class Workspace extends AppWorkspaceComponent {
     public Slider getZoomSlider() {return zoomSlider;}
     public Group getMapGroup() {return mapGroup;}
     
+    //Note: The new map implementation should be the hardest part and the first part you make sure works.
+    //The rest should be easier.
+    //Note that you can iterate through the subregions and set each polygon in their
+    //list of polygons on action, i.e. give them a listener. Do this for the table as well.
+    //Also make sure that clicking elsewhere deselects.
+    //Implement the images and their movement (with the link given), then this selection thing, then new map.
+    //Or a different order, up to me.
+    
+    
     public Workspace(MapEditorApp initApp) {
         app = initApp;
         workspace = new Pane();
