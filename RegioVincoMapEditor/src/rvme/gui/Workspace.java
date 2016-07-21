@@ -5,11 +5,13 @@
  */
 package rvme.gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -23,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -45,6 +48,8 @@ import static saf.settings.AppStartupConstants.FILE_PROTOCOL;
 import static saf.settings.AppStartupConstants.PATH_IMAGES;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import rvme.data.ImageObject;
 import rvme.file.FileManager;
 
 /**
@@ -64,6 +69,8 @@ public class Workspace extends AppWorkspaceComponent {
     boolean secondZoomCheck = true;
     Color tempColor = Color.BLACK;
     int tempIndex = -1;
+    double orgSceneX, orgSceneY;
+            double orgTranslateX, orgTranslateY;
     
     //HW4
     SplitPane splitPane = new SplitPane();
@@ -226,7 +233,7 @@ public class Workspace extends AppWorkspaceComponent {
         
         subregionsTable = new TableView();
         // AND LINK THE COLUMNS TO THE DATA - figure out how to do this later with the PropertyValueFactory
-        subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregionName"));
+        subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregion"));
         capitalNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("capital"));
         leaderNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("leader"));
         subregionsTable.getColumns().add(subregionNameColumn);
@@ -272,7 +279,79 @@ public class Workspace extends AppWorkspaceComponent {
     
     public MapController getMapController() {return mapController;}
     
+    public void addImage() {
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(new File("."));
+        fc.setTitle("Select the Image You'd Like to Add");
+        File file = fc.showOpenDialog(null);
+        
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        String imagePath = file.getAbsolutePath();
+        if (!imagePath.equals("")) {
+            
+            Image image = new Image("file:" + imagePath);
+            ImageView im = new ImageView(image);
+            
+            stackPane.getChildren().add(im);
+            //im.relocate(10,10);
+            
+            ImageObject imObj = new ImageObject(im, 0, 0, imagePath);
+            dataManager.getImageList().add(imObj);
+            
+            
+            //handle the image
+            EventHandler<MouseEvent> circleOnMousePressedEventHandler = 
+                new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    orgSceneX = t.getSceneX();
+                    orgSceneY = t.getSceneY();
+                    orgTranslateX = ((Circle)(t.getSource())).getTranslateX();
+                    orgTranslateY = ((Circle)(t.getSource())).getTranslateY();
+                    
+                }
+            };
+            EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = 
+                new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    double offsetX = t.getSceneX() - orgSceneX;
+                    double offsetY = t.getSceneY() - orgSceneY;
+                    double newTranslateX = orgTranslateX + offsetX;
+                    double newTranslateY = orgTranslateY + offsetY;
+
+                    ((Circle)(t.getSource())).setTranslateX(newTranslateX);
+                    ((Circle)(t.getSource())).setTranslateY(newTranslateY);
+                }
+            };
+            /**
+             * im.setOnMousePressed(e -> {
+                orgSceneX = e.getSceneX();
+                orgSceneY = e.getSceneY();
+                orgTranslateX = ((Circle)(e.getSource())).getTranslateX();
+                orgTranslateY = ((Circle)(e.getSource())).getTranslateY();
+            });
+            /**
+            im.setOnMouseDragged(e -> {
+                double offsetX = e.getSceneX() - orgSceneX;
+                double offsetY = e.getSceneY() - orgSceneY;
+                double newTranslateX = orgTranslateX + offsetX;
+                double newTranslateY = orgTranslateY + offsetY;
+
+                ((Circle)(e.getSource())).setTranslateX(newTranslateX);
+                ((Circle)(e.getSource())).setTranslateY(newTranslateY);
+            }); */
+            
+            
+        }
+    }
+    
     public void processHW4Events() {
+        addImageButton.setOnAction(e -> {
+            addImage();
+        });
         
         changeMapDimensionsButton.setOnAction(e -> {
             //pop up a dimensions dialog
@@ -485,7 +564,7 @@ public class Workspace extends AppWorkspaceComponent {
         //subregionsTable.getItems().clear();
         //System.out.println(dataManager.getSubregions().get(0).getCapitalName());
         
-        
+        //testing
         //if (!subregionsTable.getItems().isEmpty()) 
         if (!dataManager.getSubregions().isEmpty()) {
             //subregionsTable.getItems().clear();
@@ -509,9 +588,10 @@ public class Workspace extends AppWorkspaceComponent {
             
             //subregionsTable.setItems(dataManager.getSubregions());
             System.out.println("set worked.");
+            System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
         }
         
-        System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
+        
         
         
         //clears the workspace
@@ -649,23 +729,7 @@ public class Workspace extends AppWorkspaceComponent {
         //changeBorderColor();
         
         //now set up the two necessary images where they need to be
-        String imagePath = dataManager.getCoatOfArmsImagePath();
-        String imagePath2 = dataManager.getRegionFlagImagePath();
-        if (!imagePath.equals("")) {
-            
-            Image image = new Image("file:" + imagePath);
-            ImageView im = new ImageView(image);
-            
-            imagePane.getChildren().add(im);
-            im.relocate(dataManager.getCoatOfArmsImagePos().getX(), dataManager.getCoatOfArmsImagePos().getY());
-        }
-        if (!imagePath2.equals("")) {
-            Image image = new Image("file:" + imagePath2);
-            ImageView im = new ImageView(image);
-            
-            imagePane.getChildren().add(im);
-            im.relocate(dataManager.getFlagImagePos().getX(), dataManager.getFlagImagePos().getY());
-        }
+        //setUpTwoImages();
         //now take a snapshot
         
         
@@ -973,5 +1037,26 @@ public class Workspace extends AppWorkspaceComponent {
         //a failed experiment. The center points are not reflective of the actual points. Should I
         //just adjust it for the difference?
         
+    }
+    
+    public void setUpTwoImages() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        String imagePath = dataManager.getCoatOfArmsImagePath();
+        String imagePath2 = dataManager.getRegionFlagImagePath();
+        if (!imagePath.equals("")) {
+            
+            Image image = new Image("file:" + imagePath);
+            ImageView im = new ImageView(image);
+            
+            imagePane.getChildren().add(im);
+            im.relocate(dataManager.getCoatOfArmsImagePos().getX(), dataManager.getCoatOfArmsImagePos().getY());
+        }
+        if (!imagePath2.equals("")) {
+            Image image = new Image("file:" + imagePath2);
+            ImageView im = new ImageView(image);
+            
+            imagePane.getChildren().add(im);
+            im.relocate(dataManager.getFlagImagePos().getX(), dataManager.getFlagImagePos().getY());
+        }
     }
 }

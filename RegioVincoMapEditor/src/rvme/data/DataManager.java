@@ -24,6 +24,7 @@ public class DataManager implements AppDataComponent {
     //hw6
     //this arraylist will keep track of how many polygons are in each subregion, going in order (e.g. most should be 1)
     ArrayList<Integer> numPolygonsList = new ArrayList<>();
+    ArrayList<ImageObject> imageList = new ArrayList<>();
     //hw4
     ObservableList<SubRegion> subregions;
     //hw5 - need to add some data values
@@ -80,6 +81,8 @@ public class DataManager implements AppDataComponent {
     public Point2D getCoatOfArmsImagePos() {return coatOfArmsImagePos;}
     public boolean getFirstLoadForSliders() {return firstLoadForSliders;}
     public void setFirstLoadForSliders(boolean x) {firstLoadForSliders = x;}
+    
+    public ArrayList<ImageObject> getImageList() {return imageList;}
     
     public DataManager(MapEditorApp initApp) {
         app = initApp;
