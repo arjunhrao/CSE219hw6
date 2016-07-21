@@ -294,55 +294,33 @@ public class Workspace extends AppWorkspaceComponent {
             
             stackPane.getChildren().add(im);
             //im.relocate(10,10);
-            
             ImageObject imObj = new ImageObject(im, 0, 0, imagePath);
             dataManager.getImageList().add(imObj);
             
             
             //handle the image
-            EventHandler<MouseEvent> circleOnMousePressedEventHandler = 
-                new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent t) {
-                    orgSceneX = t.getSceneX();
-                    orgSceneY = t.getSceneY();
-                    orgTranslateX = ((Circle)(t.getSource())).getTranslateX();
-                    orgTranslateY = ((Circle)(t.getSource())).getTranslateY();
-                    
-                }
-            };
-            EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = 
-                new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent t) {
-                    double offsetX = t.getSceneX() - orgSceneX;
-                    double offsetY = t.getSceneY() - orgSceneY;
-                    double newTranslateX = orgTranslateX + offsetX;
-                    double newTranslateY = orgTranslateY + offsetY;
-
-                    ((Circle)(t.getSource())).setTranslateX(newTranslateX);
-                    ((Circle)(t.getSource())).setTranslateY(newTranslateY);
-                }
-            };
-            /**
-             * im.setOnMousePressed(e -> {
+            im.setOnMousePressed(e -> {
                 orgSceneX = e.getSceneX();
                 orgSceneY = e.getSceneY();
-                orgTranslateX = ((Circle)(e.getSource())).getTranslateX();
-                orgTranslateY = ((Circle)(e.getSource())).getTranslateY();
+                orgTranslateX = ((ImageView)(e.getSource())).getTranslateX();
+                orgTranslateY = ((ImageView)(e.getSource())).getTranslateY();
+                //System.out.println("scenex:" + orgSceneX + ",sceney:" + orgSceneY);
+                //System.out.println("transx:" + orgTranslateX + ",transy:" + orgTranslateY);
+                System.out.println(imObj.getX() + imObj.getY());
             });
-            /**
+            
+            
             im.setOnMouseDragged(e -> {
                 double offsetX = e.getSceneX() - orgSceneX;
                 double offsetY = e.getSceneY() - orgSceneY;
                 double newTranslateX = orgTranslateX + offsetX;
                 double newTranslateY = orgTranslateY + offsetY;
-
-                ((Circle)(e.getSource())).setTranslateX(newTranslateX);
-                ((Circle)(e.getSource())).setTranslateY(newTranslateY);
-            }); */
+                //System.out.println("newTransx:" + newTranslateX + ",newTransY:" + newTranslateY);
+                ((ImageView)(e.getSource())).setTranslateX(newTranslateX);
+                ((ImageView)(e.getSource())).setTranslateY(newTranslateY);
+                //imObj.setX(((ImageView)(e.getSource())).getTranslateX());
+                //imObj.setY(((ImageView)(e.getSource())).getTranslateY());
+            });
             
             
         }
@@ -633,6 +611,9 @@ public class Workspace extends AppWorkspaceComponent {
               //  System.out.println("asdf");
                 //mapController.addPolygonsToSubregions();
             //}
+        }
+        else {
+            app.getGUI().getFileController().setSaved(false);
         }
         
        //this was for testing i guess 

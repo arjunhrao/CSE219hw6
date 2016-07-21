@@ -592,7 +592,8 @@ public class MapController {
         
         setFileButtons();
         
-        
+        //myManager.setRawMapPath(selectedFile.getAbsolutePath());
+        //System.out.println("new map:" + selectedFile.getAbsolutePath());
         //FileChooser fc = new FileChooser();
         
         FlowPane mapNameStuff = new FlowPane();
@@ -733,6 +734,8 @@ public class MapController {
             
             dataFile.setText(selectedFile.getAbsolutePath());
             
+            //hw6 morning
+            myManager.setRawMapPath(selectedFile.getAbsolutePath());
         });
     }
 }

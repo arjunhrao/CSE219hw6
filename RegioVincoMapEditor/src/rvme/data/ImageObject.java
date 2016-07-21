@@ -22,4 +22,9 @@ public class ImageObject {
         y=initY;
         imagePath = initPath;
     }
+    
+    public void setX(double newX) {x = newX;}
+    public void setY(double newY) {y = newY;}
+    public double getX() {return x;}
+    public double getY() {return y;}
 }
