@@ -1,0 +1,101 @@
+
+{
+    "map_name":"Andorra",
+    "parent_directory":"to be set when the new button is pressed, not needed for HW5",
+    "background_color_red":"0.7019608020782471",
+    "background_color_blue":"0.10196078568696976",
+    "background_color_green":"0.10196078568696976",
+    "border_color_blue":"0.6000000238418579",
+    "border_color_red":"0.3019607961177826",
+    "border_color_green":"0.20000000298023224",
+    "raw_map_path":"./raw_map_data/Andorra.json",
+    "region_flag_image_path":"./export/The World/Europe/Andorra Flag.png",
+    "coat_of_arms_image_path":"./export/The World/Europe/Andorra Coa.png",
+    "map_position_x":0.0,
+    "map_position_y":0.0,
+    "flag_image_pos_x":400.0,
+    "flag_image_pos_y":450.0,
+    "coa_image_pos_x":5.0,
+    "coa_image_pos_y":5.0,
+    "zoom":371.8145161290323,
+    "subregions":[
+        {
+            "subregion_name":"savetestOrdino",
+            "capital_name":"Ordino (town)",
+            "leader_name":"Ventura Espot",
+            "flag_image_path":"./export/The World/Europe/Andorra/savetestOrdino Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Ventura Espot.png",
+            "red":"0.7843137383460999",
+            "blue":"0.7843137383460999",
+            "green":"0.7843137383460999",
+            "border_thickness":"0.02838709677419355"
+        },
+        {
+            "subregion_name":"Canillo",
+            "capital_name":"Canillo (town)",
+            "leader_name":"Enric Casadevall Medrano",
+            "flag_image_path":"./export/The World/Europe/Andorra/Canillo Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Enric Casadevall Medrano.png",
+            "red":"0.7764706015586853",
+            "blue":"0.7764706015586853",
+            "green":"0.7764706015586853",
+            "border_thickness":"0.02838709677419355"
+        },
+        {
+            "subregion_name":"Encamp",
+            "capital_name":"Encamp (town)",
+            "leader_name":"Miquel Alís Font",
+            "flag_image_path":"./export/The World/Europe/Andorra/Encamp Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Miquel Alís Font.png",
+            "red":"0.7686274647712708",
+            "blue":"0.7686274647712708",
+            "green":"0.7686274647712708",
+            "border_thickness":"0.02838709677419355"
+        },
+        {
+            "subregion_name":"Escaldes-Engordany",
+            "capital_name":"Escaldes-Engordany (town)",
+            "leader_name":"Montserrat Capdevila Pallarés",
+            "flag_image_path":"./export/The World/Europe/Andorra/Escaldes-Engordany Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Montserrat Capdevila Pallarés.png",
+            "red":"0.7607843279838562",
+            "blue":"0.7607843279838562",
+            "green":"0.7607843279838562",
+            "border_thickness":"0.02838709677419355"
+        },
+        {
+            "subregion_name":"La Massana",
+            "capital_name":"La Massana (town)",
+            "leader_name":"Josep Areny",
+            "flag_image_path":"./export/The World/Europe/Andorra/La Massana Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Josep Areny.png",
+            "red":"0.7529411911964417",
+            "blue":"0.7529411911964417",
+            "green":"0.7529411911964417",
+            "border_thickness":"0.02838709677419355"
+        },
+        {
+            "subregion_name":"Andorra la Vella",
+            "capital_name":"Andorra la Vella (town)",
+            "leader_name":"Maria Rosa Ferrer Obiols",
+            "flag_image_path":"./export/The World/Europe/Andorra/Andorra la Vella Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Maria Rosa Ferrer Obiols.png",
+            "red":"0.7450980544090271",
+            "blue":"0.7450980544090271",
+            "green":"0.7450980544090271",
+            "border_thickness":"0.02838709677419355"
+        },
+        {
+            "subregion_name":"Sant Julia de Loria",
+            "capital_name":"Sant Julia de Loria (town)",
+            "leader_name":"Josep Pintat Forné",
+            "flag_image_path":"./export/The World/Europe/Andorra/Sant Julia de Loria Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/Josep Pintat Forné.png",
+            "red":"0.7372549176216125",
+            "blue":"0.7372549176216125",
+            "green":"0.7372549176216125",
+            "border_thickness":"0.02838709677419355"
+        }
+    ],
+    "images":[]
+}

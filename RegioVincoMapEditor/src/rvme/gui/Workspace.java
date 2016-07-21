@@ -21,6 +21,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.*;
@@ -317,7 +318,28 @@ public class Workspace extends AppWorkspaceComponent {
             stackPane.getChildren().add(iv);
             ImageObject io = new ImageObject(iv, 0.0, 0.0, imagePath);
             dataManager.getImageList().add(io);
-            iv.setOnMousePressed(e -> {
+            handleImages(iv, imagePath, io);
+            
+            /*
+                for (ImageObject io : dataManager.getImageList()) {
+                    Image image = new Image("file:" + imagePath);
+                    ImageView im = new ImageView(image);
+
+                    stackPane.getChildren().add(im);
+                    //im.relocate(10,10);
+                    ImageObject imObj = new ImageObject(im, 0, 0, imagePath);
+                    dataManager.getImageList().add(imObj);
+            */
+
+
+                    //handle the image
+        }
+    }
+    
+    public void handleImages(ImageView iv, String imagePath, ImageObject io) {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        iv.setOnMousePressed(e -> {
+                app.getGUI().updateToolbarControls(false);
                 orgSceneX = e.getSceneX();
                 orgSceneY = e.getSceneY();
                 orgTranslateX = ((ImageView)(e.getSource())).getTranslateX();
@@ -365,23 +387,7 @@ public class Workspace extends AppWorkspaceComponent {
                     removeImageButton.setDisable(true);
                 });
             });
-            
-            /*
-                for (ImageObject io : dataManager.getImageList()) {
-                    Image image = new Image("file:" + imagePath);
-                    ImageView im = new ImageView(image);
-
-                    stackPane.getChildren().add(im);
-                    //im.relocate(10,10);
-                    ImageObject imObj = new ImageObject(im, 0, 0, imagePath);
-                    dataManager.getImageList().add(imObj);
-            */
-
-
-                    //handle the image
-        }
     }
-    
         
     public void removeImage(String two) {
         DataManager dataManager = (DataManager)app.getDataComponent();
@@ -396,6 +402,23 @@ public class Workspace extends AppWorkspaceComponent {
     }
     
     public void processHW4Events() {
+        renameMapButton.setOnAction(e -> {
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            TextInputDialog dialog = new TextInputDialog("Map Name");
+            dialog.setTitle("Map Name");
+            dialog.setHeaderText("Rename Map");
+            dialog.setContentText("Please enter the map name you'd like to change to:");
+
+            // Traditional way to get the response value.
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                System.out.println("Your name: " + result.get());
+            }
+        });
+        playAnthemButton.setOnAction(e -> {
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            dataManager.getMapName()
+        });
         app.getGUI().getPrimaryScene().setOnKeyPressed(e -> {
             borderThickness.setFocusTraversable(false);
             zoomSlider.setFocusTraversable(false);
@@ -433,6 +456,7 @@ public class Workspace extends AppWorkspaceComponent {
             //changed();
             //deselectRegion();
             addImage();
+            app.getGUI().updateToolbarControls(false);
         });
         
         changeMapDimensionsButton.setOnAction(e -> {
@@ -688,16 +712,6 @@ public class Workspace extends AppWorkspaceComponent {
             //System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
         }
         
-        
-        
-        
-        //clears the workspace
-        //workspace.getChildren().clear();
-        
-        //set the background to be lightblue
-        //workspace.setStyle("-fx-background-color: lightblue;");
-           
-        //fill polygons with green
         dataManager.fillPolygons(Paint.valueOf("#556B2F"));
         
         //clears the pane so you can load something else
@@ -721,15 +735,7 @@ public class Workspace extends AppWorkspaceComponent {
         if (dataManager.getFirstLoadForSliders()) {
             zoomSlider.setValue(dataManager.getZoom());
             dataManager.setFirstLoadForSliders(false);
-            //System.out.println(dataManager.getFirstLoadForSliders());
-            //System.out.println(dataManager.getPolygonList());
             
-            //System.out.println(dataManager.getSubregions());
-            //System.out.println(dataManager.getSubregions().size());
-            //if (dataManager.getSubregions().get(0).getPolygonList().isEmpty()) {
-              //  System.out.println("asdf");
-                //mapController.addPolygonsToSubregions();
-            //}
         }
         else {
             app.getGUI().getFileController().setSaved(false);
@@ -808,12 +814,6 @@ public class Workspace extends AppWorkspaceComponent {
         }
         //hw5
        
-        
-        
-        //subregionsTable.setItems(dataManager.getSubregions());
-        
-        //centerMap();
-        
         //HW5 - Taking into account the data. CenterMap() does this using the zoom data field in the manager.
         Color tempColor = dataManager.getBackgroundColor();
         String hexColorString = String.format( "#%02X%02X%02X",
@@ -860,12 +860,15 @@ public class Workspace extends AppWorkspaceComponent {
             //Image image = new Image("file:" + imagePath);
             //ImageView im = new ImageView(image);
             //stackPane.getChildren().add(im);
-            stackPane.getChildren().add(io.getImageView());
+            ImageView ex = io.getImageView();
+            ex.setTranslateX(io.getX());
+            ex.setTranslateY(io.getY());
+            stackPane.getChildren().add(ex);
+            
             //stackPane has already been cleared, need to add the imageviews
         }
         app.getGUI().updateToolbarControls(false);
         //app.getGUI().getAppPane().setCenter(splitPane);
-        
         
     }
     

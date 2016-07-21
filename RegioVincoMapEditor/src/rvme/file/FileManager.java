@@ -5,6 +5,7 @@
  */
 package rvme.file;
 
+import java.io.File;
 import java.util.concurrent.locks.ReentrantLock;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
@@ -32,8 +33,10 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.stage.FileChooser;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -46,6 +49,7 @@ import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
 import rvme.data.DataManager;
+import rvme.data.ImageObject;
 import rvme.data.SubRegion;
 import rvme.gui.Workspace;
 import saf.components.AppDataComponent;
@@ -148,7 +152,18 @@ public class FileManager implements AppFileComponent {
                     .add("border_thickness", String.valueOf(item.getSubregionBorderThickness())).build();
 	    arrayBuilder.add(itemJson);
 	}
+        
 	JsonArray itemsArray = arrayBuilder.build();
+        
+        ArrayList<ImageObject> images = dataManager.getImageList();
+	for (ImageObject image : images) {
+	    JsonObject imageJson = Json.createObjectBuilder()
+		    .add("image_path", image.getImagePath())
+		    .add("x_pos", image.getX())
+		    .add("y_pos", image.getY()).build();
+	    arrayBuilder.add(imageJson);
+	}
+        JsonArray imagesArray = arrayBuilder.build();
 	
 	// THEN PUT IT ALL TOGETHER IN A JsonObject
 	JsonObject dataManagerJSO = Json.createObjectBuilder()
@@ -171,6 +186,7 @@ public class FileManager implements AppFileComponent {
                 .add("coa_image_pos_y", dataManager.getCoatOfArmsImagePos().getY())
                 .add("zoom", dataManager.getZoom())
 		.add("subregions", itemsArray)
+                .add("images", imagesArray)
 		.build();
 	
 	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
@@ -347,11 +363,47 @@ public class FileManager implements AppFileComponent {
 	    dataManager.getSubregions().add(temp);
 	}
         
+        System.out.println("subregions worked");
+        
+        
+        
+        JsonArray list2 = json.getJsonArray("images");
+        System.out.println("there's a problem.");
+        System.out.println(list2.size());
+        for (int i = 0; i < list2.size(); i++) {
+            System.out.println("i -" + i);
+	    JsonObject io = list2.getJsonObject(i);
+            System.out.println("asdf");
+            
+            double a = getDataAsDouble(io, "x_pos");
+            double b = getDataAsDouble(io, "y_pos");
+            //set everything for the curretn thing
+            System.out.println("doubles");
+            String imagePath = io.getString("image_path");
+            
+            System.out.println(imagePath);
+            
+            Image image = new Image("file:" + imagePath);
+            ImageView iv = new ImageView(image);
+            
+            
+            System.out.println("asdf");
+            
+            ImageObject temp = new ImageObject(iv, a, b, io.getString("image_path"));
+            //next small bit sets the overall border thickness to that of the first subregion
+            //add it to the datamanager
+	    dataManager.getImageList().add(temp);
+            Workspace ws = (Workspace)dataManager.getMapEditorApp().getWorkspaceComponent();
+            ws.handleImages(temp.getImageView(),temp.getImagePath(),temp);
+            
+            System.out.println("X,Y:" + temp.getX() + "," + temp.getY());
+	}
+        
+        System.out.println("images worked.");
         //System.out.println(dataManager.getSubregions().size());
         //System.out.println(dataManager.getPolygonList().size());
         //Workspace workspace = (Workspace)dataManager.getMapEditorApp().getWorkspaceComponent();
         //workspace.centerMap();
-        
         
         
         int adder = 0;
@@ -368,6 +420,9 @@ public class FileManager implements AppFileComponent {
         }
         
         System.out.println("loading complete.");
+        Workspace ws = (Workspace)dataManager.getMapEditorApp().getWorkspaceComponent();
+        ws.reloadWorkspace();
+        
     }
     
     public ArrayList<Polygon> loadSubregion(JsonObject obj) {
