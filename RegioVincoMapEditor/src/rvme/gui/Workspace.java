@@ -249,8 +249,8 @@ public class Workspace extends AppWorkspaceComponent {
         //mapPane.getChildren().add(mapIm);
         
         //add to splitpane
-        stackPane.getChildren().add(mapGroup);
-        stackPane.getChildren().add(imagePane);
+        
+        //stackPane.getChildren().add(imagePane);
         //stackPane.getChildren().add(barPane);
         splitPane.getItems().add(stackPane);
         splitPane.getItems().add(subregionsTable);
@@ -483,6 +483,7 @@ public class Workspace extends AppWorkspaceComponent {
             //mapGroup.setTranslateX(mapGroup.getTranslateY()-5);
             mapGroup.setTranslateY(mapGroup.getTranslateY() + 150);
             mapGroup.setTranslateX(mapGroup.getTranslateX() + 675);
+            System.out.println("firstZoomCheck if statement entered");
             //centerXNew -= (322.7168273925781 - 316.6902770996094);
             
             firstZoomCheck = false;
@@ -496,6 +497,36 @@ public class Workspace extends AppWorkspaceComponent {
         
         //a failed experiment. The center points are not reflective of the actual points. Should I
         //just adjust it for the difference?
+        
+    }
+    
+    public void reloadWorkspaceFromNew() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        FileManager fileManager = (FileManager)app.getFileComponent();
+        dataManager.fillPolygons(Paint.valueOf("#556B2F"));
+        System.out.println("size from New: " + dataManager.getPolygonList().size());
+        mapGroup.getChildren().clear();
+        imagePane.getChildren().clear();
+        barPane.getChildren().clear();
+        
+        zoomSlider.setValue(100.0);
+        dataManager.setZoom(100.0);
+        
+        for (Polygon poly: dataManager.getPolygonList()) {
+          
+          //use the right width
+          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
+          
+          
+          mapGroup.getChildren().addAll(poly);
+          
+          System.out.println(mapGroup.getChildren().size());
+          
+          
+        }
+        dataManager.setBackgroundColor(Color.CORAL);
+        //centerMap();
+        app.getGUI().getAppPane().setCenter(splitPane);
         
     }
     
@@ -549,9 +580,11 @@ public class Workspace extends AppWorkspaceComponent {
           
         }
         //hw5
+        
+        
         subregionsTable.setItems(dataManager.getSubregions());
         
-        centerMap();
+        //centerMap();
         
         //HW5 - Taking into account the data. CenterMap() does this using the zoom data field in the manager.
         //renderPane.setScaleX(4);
@@ -608,7 +641,13 @@ public class Workspace extends AppWorkspaceComponent {
         //splitPane.getItems().clear();
         //editToolbar.getChildren().clear();
         //initHW4Layout();
-        app.getGUI().getAppPane().setCenter(splitPane);
+        
+        System.out.println("size:" + mapGroup.getChildren().size());
+        mapGroup.setScaleX(200.0);
+        mapGroup.setScaleY(200.0);
+        
+        stackPane.getChildren().add(mapGroup);
+        //app.getGUI().getAppPane().setCenter(splitPane);
         
         
         

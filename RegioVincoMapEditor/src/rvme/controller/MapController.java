@@ -592,8 +592,9 @@ public class MapController {
             
             changesMade();
             //update the workspace / table
-            workspace.reloadWorkspace();
+            workspace.reloadWorkspaceFromNew();
             //useless line of code: app.getWorkspaceComponent().getWorkspace().getChildren().clear();
+            workspace.reloadWorkspace();
         }
         
     }
