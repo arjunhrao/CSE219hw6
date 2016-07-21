@@ -62,6 +62,8 @@ public class Workspace extends AppWorkspaceComponent {
     boolean firstLoad = true;
     boolean firstZoomCheck = true;
     boolean secondZoomCheck = true;
+    Color tempColor = Color.BLACK;
+    int tempIndex = -1;
     
     //HW4
     SplitPane splitPane = new SplitPane();
@@ -88,6 +90,9 @@ public class Workspace extends AppWorkspaceComponent {
     ColorPicker changeBorderColorPicker;
     Slider borderThickness;
     Slider zoomSlider;
+    
+    boolean selected;
+    int lastSelectedIndex;
     
     public Slider getBorderThicknessSlider() {return borderThickness;}
     public Slider getZoomSlider() {return zoomSlider;}
@@ -272,12 +277,44 @@ public class Workspace extends AppWorkspaceComponent {
             mapController.processMapDimensions();
         });
         subregionsTable.setOnMouseClicked(e -> {
-           
-                
+            DataManager dataManager = (DataManager)app.getDataComponent();
+            
+            
+            
             if (e.getClickCount() == 2) {
                 SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
                 mapController.processEditSubregion(it);
             }
+            
+            
+            
+            
+            
+            if (selected) {
+                if(lastSelectedIndex == subregionsTable.getSelectionModel().getSelectedIndex()){
+                    subregionsTable.getSelectionModel().clearSelection();
+                    selected = false;
+                    updateBorderColor();
+                    
+                }else{
+                    lastSelectedIndex=subregionsTable.getSelectionModel().getSelectedIndex();
+                    
+                }
+            }else{
+                lastSelectedIndex=subregionsTable.getSelectionModel().getSelectedIndex();
+                selected = true;
+            }
+            if (selected) {
+            }
+            if (!selected) {
+            }
+            
+            if (selected) {
+                int currentSubRegionIndex = subregionsTable.getSelectionModel().getSelectedIndex();
+                reloadMapFromTable(currentSubRegionIndex);
+                
+            }
+            
         });
         //now also processes HW6 events!!
         changeBackgroundColorPicker.setOnAction(e -> {
@@ -332,6 +369,59 @@ public class Workspace extends AppWorkspaceComponent {
         //});
         
     }
+    
+    public void reloadMapFromTable(int index) {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        SubRegion current = dataManager.getSubregions().get(index);
+        tempIndex = index;
+        Color tempBorderColor = dataManager.getBorderColor();
+        String hexBorderColorString = String.format( "#%02X%02X%02X",
+            (int)( tempBorderColor.getRed() * 255 ),
+            (int)( tempBorderColor.getGreen() * 255 ),
+            (int)( tempBorderColor.getBlue() * 255 ) );
+        mapGroup.getChildren().clear();
+        for (Polygon poly: dataManager.getPolygonList()) {
+          //use the right color
+          //HW6: gonna need to change the value of the border to something red I think? although if the other
+          //polygons are drawn after, then this might be a problem...
+          if (current.getPolygonList().contains(poly)) {
+              System.out.println("Current subregion selection has this polygon.");
+              poly.setStroke(Color.RED);
+              
+          }
+          else {
+            poly.setStroke(Paint.valueOf(hexBorderColorString));
+          }
+          //use the right width
+          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
+          
+          poly.toFront();
+          
+          
+          mapGroup.getChildren().addAll(poly);
+          
+          
+          
+        }
+        
+        for (Polygon polygon: dataManager.getPolygonList()) {
+            if (current.getPolygonList().contains(polygon)) {
+            //System.out.println("*****Current subregion selection has this polygon.");
+            polygon.toFront();
+            }
+        }
+        
+        changePolygonColors();
+        
+        
+        System.out.println("Paint:" + current.getPolygonList().get(0).getFill());
+        
+        //dataManager.getPolygonList()
+        //dataManager.getPolygonList().get(k+adder).setFill(Paint.valueOf(hexColorString2));
+        
+        
+    }
+    
     
     public void processEvents() {
 
@@ -476,9 +566,9 @@ public class Workspace extends AppWorkspaceComponent {
               //  System.out.println("asdf");
                 //mapController.addPolygonsToSubregions();
             //}
-                
         }
         
+       //this was for testing i guess 
         if (!dataManager.getSubregions().isEmpty()) {
             System.out.println("first sr size- " + dataManager.getSubregions().get(0).getPolygonList().size());
             
@@ -486,10 +576,11 @@ public class Workspace extends AppWorkspaceComponent {
         else {
             System.out.println("subregions list is empty");
         }
-        //this if statement was added to make sure that the polygons have been added to subregions
+        //this below if statement was added to make sure that the polygons have been added to subregions
         //and does it if they haven't been.
         //Or at least, that's what I want, but I'm getting an error, prob bc they're not initialized
         //for the first run.
+        
         //if (!dataManager.getPolygonList().isEmpty() && !dataManager.getSubregions().isEmpty() && dataManager.getSubregions().get(0).getPolygonList().isEmpty())
             //mapController.addPolygonsToSubregions();
         
@@ -498,20 +589,55 @@ public class Workspace extends AppWorkspaceComponent {
         for (SubRegion sub: dataManager.getSubregions()) {
             sub.setSubregionBorderThickness(borderThickness.getValue());
         }
-        //add the polygons
+        
+        //find border color
         Color tempBorderColor = dataManager.getBorderColor();
         String hexBorderColorString = String.format( "#%02X%02X%02X",
             (int)( tempBorderColor.getRed() * 255 ),
             (int)( tempBorderColor.getGreen() * 255 ),
             (int)( tempBorderColor.getBlue() * 255 ) );
+        
+        //add polygons
         for (Polygon poly: dataManager.getPolygonList()) {
           //use the right color
           poly.setStroke(Paint.valueOf(hexBorderColorString));
+          
+          //change the border to red if there is a selected
+          if (selected && tempIndex != -1) {
+              
+            if (dataManager.getSubregions().get(tempIndex).getPolygonList().contains(poly)) {
+                poly.setStroke(Color.RED);
+            }
+            
+          }
+              
+              
           //use the right width
           poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
           
           mapGroup.getChildren().addAll(poly);
           
+          //for every polygon, set it on mouseclicked to the setPolygonOnMouseClicked(polygon) method
+          //This handles highlighting and is documented in the method. The e.getClcikCount() == 2 part
+          //is for double clicking on a polygon, which opens the edit process for the currently selected
+          //item in the table (which will be that polygon as of the first of the two clicks).
+          poly.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
+                mapController.processEditSubregion(it);
+            }
+            setPolygonOnMouseClicked(poly);
+          });
+          
+        }
+        if (selected && tempIndex != -1) {
+              
+            for (Polygon polygon: dataManager.getPolygonList()) {
+                if (dataManager.getSubregions().get(tempIndex).getPolygonList().contains(polygon)) {
+                    //System.out.println("#reloadWorkspace: Current subregion selection has this polygon.");
+                    polygon.toFront();
+                }
+            }
         }
         //hw5
         
@@ -521,9 +647,6 @@ public class Workspace extends AppWorkspaceComponent {
         //centerMap();
         
         //HW5 - Taking into account the data. CenterMap() does this using the zoom data field in the manager.
-        //renderPane.setScaleX(4);
-        //renderPane.setScaleY(4);
-        //renderPane.setStyle("-fx-background-color: lightblue;");
         Color tempColor = dataManager.getBackgroundColor();
         String hexColorString = String.format( "#%02X%02X%02X",
             (int)( tempColor.getRed() * 255 ),
@@ -537,7 +660,6 @@ public class Workspace extends AppWorkspaceComponent {
         
         changePolygonColors();
         //changeBorderColor();
-        
         
         //now set up the two necessary images where they need to be
         String imagePath = dataManager.getCoatOfArmsImagePath();
@@ -584,11 +706,130 @@ public class Workspace extends AppWorkspaceComponent {
         //app.getGUI().getAppPane().setCenter(splitPane);
         
         
+    }
+    
+    public void setPolygonOnMouseClicked(Polygon polyClicked) {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        int temp = 0;
+        int counter = 0;
         
+        for (SubRegion sub : dataManager.getSubregions()) {
+            if (sub.getPolygonList().contains(polyClicked)) {
+                temp = counter;
+                System.out.println("index of SR with polyClicked:" + temp);
+                
+            }
+            counter++;
+        }
+        //System.out.println("tempindex: " + tempIndex);
+        
+        
+        if (selected) {
+            
+            selected = false;
+            updateBorderColor();
+            //if the subregion that you clicked on is not the same as the one you had selected,
+            //select the one you clicked on. The one you clicked on can be got using your counter,
+            //(or temp), and the one that you had selected previously is stored by tempIndex.
+            //clearSelection if not?
+            if (tempIndex != temp) {
+                //clear previous selection that tempIndex stored
+                subregionsTable.getSelectionModel().clearSelection();
+                //select based on temp
+                subregionsTable.getSelectionModel().select(dataManager.getSubregions().get(temp));
+                
+                lastSelectedIndex=subregionsTable.getSelectionModel().getSelectedIndex();
+                selected = true;
+                
+                //set the tempIndex to be the currently selected index
+                tempIndex = temp;
+                
+                //highlight the polygon red
+                updateBorderColor();
+            }
+            else {
+                //they are the same (the one you clicked on and the one that was previously highlighted
+                //so deselect everything
+                
+                //actually I don't want to fix this. It's fine as it is.
+                //Better to spend my time doing another use case then making this better
+                //(it's already good according to the SRS).
+                
+                //System.out.println("deselect");
+                //reset tempIndex
+                //tempIndex = -1;
+                //selected = false
+                //subregionsTable.getSelectionModel().clearSelection();
+                //System.out.println("deselected model");
+                //updateBorderColor();
+            }
+            
+            
+        }
+        
+        if (!selected) {
+            //select temp in the table
+            subregionsTable.getSelectionModel().select(dataManager.getSubregions().get(temp));
+            //select temp as a polygon
+            
+            //update tempIndex and other things
+            lastSelectedIndex=subregionsTable.getSelectionModel().getSelectedIndex();
+            selected = true;
+            tempIndex = temp;
+            //highlights it for us:
+            updateBorderColor();
+            
+        }
         
     }
+    
     public void newRenderPane() {
         renderPane = new Pane();
+    }
+    
+    public void updateBorderColor() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        dataManager.setBorderThickness(borderThickness.getValue());
+        mapGroup.getChildren().clear();
+        for (SubRegion sub: dataManager.getSubregions()) {
+            sub.setSubregionBorderThickness(borderThickness.getValue());
+        }
+        //add the polygons
+        Color tempBorderColor = dataManager.getBorderColor();
+        String hexBorderColorString = String.format( "#%02X%02X%02X",
+            (int)( tempBorderColor.getRed() * 255 ),
+            (int)( tempBorderColor.getGreen() * 255 ),
+            (int)( tempBorderColor.getBlue() * 255 ) );
+        for (Polygon poly: dataManager.getPolygonList()) {
+          //use the right color
+          poly.setStroke(Paint.valueOf(hexBorderColorString));
+          
+          //change the border to red if there is a selected
+          if (selected && tempIndex != -1) {
+              
+            if (dataManager.getSubregions().get(tempIndex).getPolygonList().contains(poly)) {
+                //System.out.println("##Reload: For loop: Current subregion selection has this polygon.");
+                poly.setStroke(Color.RED);
+            } 
+          }
+              
+              
+          //use the right width
+          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
+          
+          mapGroup.getChildren().addAll(poly);
+        }
+        
+        if (selected && tempIndex != -1) {
+              
+            for (Polygon polygon: dataManager.getPolygonList()) {
+                if (dataManager.getSubregions().get(tempIndex).getPolygonList().contains(polygon)) {
+                    //System.out.println("#reloadWorkspace: Current subregion selection has this polygon.");
+                    polygon.toFront();
+                }
+            }
+        }
+        
     }
 
     @Override
