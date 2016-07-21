@@ -471,9 +471,13 @@ public class MapController {
         VBox flagImageBox = new VBox();
         Label flagImageLabel = new Label("Flag Image:");
         //create the flag image
-        String imagePath = FILE_PROTOCOL + PATH_IMAGES + "FlagImage.png";
+        String imagePath = FILE_PROTOCOL + it.getFlagImagePath();
+        File flagImageFileName = new File(it.getFlagImagePath());
+            
         Image flagImage = new Image(imagePath);
         ImageView flagIm = new ImageView(flagImage);
+        flagIm.setFitWidth(200.0);
+        flagIm.setFitHeight(200.0);
         //mapIm.relocate(15,100);
         
         flagImageBox.getChildren().addAll(flagImageLabel, flagIm);
@@ -483,13 +487,28 @@ public class MapController {
         VBox leaderImageBox = new VBox();
         Label leaderImageLabel = new Label("Leader Image:");
         //create the leader image
-        String imagePath2 = FILE_PROTOCOL + PATH_IMAGES + "LeaderImage.png";
+        //String imagePath2 = FILE_PROTOCOL + PATH_IMAGES + "LeaderImage.png";
+        String imagePath2 = FILE_PROTOCOL + it.getLeaderImagePath();
+        File leaderImageFileName = new File(it.getLeaderImagePath());
+        
         Image leaderImage = new Image(imagePath2);
         ImageView leaderIm = new ImageView(leaderImage);
+        leaderIm.setFitWidth(200.0);
+        leaderIm.setFitHeight(200.0);
         //mapIm.relocate(15,100);
+        
         
         leaderImageBox.getChildren().addAll(leaderImageLabel, leaderIm);
         gridPane.add(leaderImageBox, 1, 3);
+        
+        if (!leaderImageFileName.exists()) {
+            leaderImageLabel.setText(leaderImageLabel.getText() + " " + leaderImageFileName + " does not exist.");
+            
+        }
+        if (!flagImageFileName.exists()) {
+            flagImageLabel.setText(flagImageLabel.getText() + " " + flagImageFileName + " does not exist.");
+            
+        }
         
         //make and add prev and next buttons - NOTE: these buttons should be made outside later,
         //need to be able to access them. Also, maybe make a separate class for the subregion dialog.
@@ -504,21 +523,30 @@ public class MapController {
         Optional<ButtonType> result = dialog.showAndWait();
         
         if (result.isPresent() && result.get() == okButtonType) {
-            //set and save the data to myItem and add it to the arraylist in the datamanager obj myManager
-            //use mysubregion? check the other controller
+            //save the data to the dataManager
+            int srIndex = myManager.getSubregions().indexOf(it);
+            SubRegion sr = myManager.getSubregions().get(srIndex);
+            sr.setCapitalName(capital.getText());
+            sr.setLeaderName(leader.getText());
+            sr.setSubregionName(subregionName.getText());
+            
             
             //enable the save button
             //HW4: app.getGUI().getSaveButton().setDisable(false);
             
             changesMade();
             //update the workspace / table
+            
+            
+            //workspace.getSubregionsTable().setItems(myManager.getSubregions());
+            System.out.println(myManager.getSubregions().get(0).getSubregionName());
             workspace.reloadWorkspace();
             //useless line of code: app.getWorkspaceComponent().getWorkspace().getChildren().clear();
         }
         
     }
 
-    public void processNewMapDialog() throws IOException {
+    public boolean processNewMapDialog() throws IOException {
         // ENABLE/DISABLE THE PROPER BUTTONS
 	Workspace workspace = (Workspace)app.getWorkspaceComponent();
 	//workspace.reloadWorkspace();
@@ -595,6 +623,9 @@ public class MapController {
             workspace.reloadWorkspaceFromNew();
             //useless line of code: app.getWorkspaceComponent().getWorkspace().getChildren().clear();
             workspace.reloadWorkspace();
+            return true;
+        } else {
+            return false;
         }
         
     }
@@ -615,9 +646,10 @@ public class MapController {
         
         //create blank subregions
         for (int j = 0; j < myManager.getNumPolygonsList().size(); j++) {
-            SubRegion sr = new SubRegion("", "", "");
+            SubRegion sr = new SubRegion("Subregion" + (j+1), "", "");
             myManager.getSubregions().add(sr);
         }
+        
         System.out.println("first subregion size:" + myManager.getSubregions().get(0).getPolygonList().size());
         //add the appropriate polygons
         addPolygonsToSubregions();
@@ -626,8 +658,6 @@ public class MapController {
         //workspace.reloadWorkspace();
         
         System.out.println("reload complete");
-        
-        
     }
     
     public void addPolygonsToSubregions() {
@@ -635,19 +665,15 @@ public class MapController {
         myManager=(DataManager)app.getDataComponent();
         int adder = 0;
         for (int k = 0; k < myManager.getSubregions().size(); k++) {
-            System.out.println("k:" + k + "\n adder:" + adder);
+            //System.out.println("k:" + k + "\n adder:" + adder);
             myManager.getSubregions().get(k).getPolygonList().add(myManager.getPolygonList().get(k+adder));
             
             for (int i = 0; i < myManager.getNumPolygonsList().get(k)-1; i++) {
                 myManager.getSubregions().get(k).getPolygonList().add(myManager.getPolygonList().get(k+adder+1));
                 adder++;
-                System.out.println("****" + (k+adder));
+                //System.out.println("****" + (k+adder));
             }
-            
-            
         }
-        
-        workspace.reloadWorkspace();
         
     }
 

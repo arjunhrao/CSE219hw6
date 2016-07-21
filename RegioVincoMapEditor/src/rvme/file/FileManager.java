@@ -356,16 +356,18 @@ public class FileManager implements AppFileComponent {
         
         int adder = 0;
         for (int k = 0; k < dataManager.getSubregions().size(); k++) {
-            System.out.println("k:" + k + "\n adder:" + adder);
+            //System.out.println("k:" + k + "\n adder:" + adder);
             dataManager.getSubregions().get(k).getPolygonList().add(dataManager.getPolygonList().get(k+adder));
             
             for (int i = 0; i < dataManager.getNumPolygonsList().get(k)-1; i++) {
                 dataManager.getSubregions().get(k).getPolygonList().add(dataManager.getPolygonList().get(k+adder+1));
                 adder++;
-                System.out.println("****" + (k+adder));
+                //System.out.println("****" + (k+adder));
             }
             
         }
+        
+        System.out.println("loading complete.");
     }
     
     public ArrayList<Polygon> loadSubregion(JsonObject obj) {

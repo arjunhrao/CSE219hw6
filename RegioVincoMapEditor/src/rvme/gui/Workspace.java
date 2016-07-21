@@ -127,7 +127,7 @@ public class Workspace extends AppWorkspaceComponent {
         mapController = new MapController(app);
         
         //initialize processing of eventhandlers - create new method
-        processEvents();
+        //processEvents();
         processHW4Events();
     }
     
@@ -226,12 +226,13 @@ public class Workspace extends AppWorkspaceComponent {
         
         subregionsTable = new TableView();
         // AND LINK THE COLUMNS TO THE DATA - figure out how to do this later with the PropertyValueFactory
-        subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregionName"));
-        capitalNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("capitalName"));
-        leaderNameColumn.setCellValueFactory(new PropertyValueFactory<LocalDate, String>("leaderName"));
+        subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregion"));
+        capitalNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("capital"));
+        leaderNameColumn.setCellValueFactory(new PropertyValueFactory<LocalDate, String>("leader"));
         subregionsTable.getColumns().add(subregionNameColumn);
         subregionsTable.getColumns().add(capitalNameColumn);
         subregionsTable.getColumns().add(leaderNameColumn);
+        
         //PropertyValueFactory<String, String> xd = new PropertyValueFactory<String, String>("subregionName");
         
         DataManager dataManager = (DataManager)app.getDataComponent();
@@ -244,6 +245,7 @@ public class Workspace extends AppWorkspaceComponent {
         
         //System.out.println(x.getCapitalName());
         subregionsTable.setItems(dataManager.getSubregions());
+        System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
         
         //splitPane.getItems().addAll(subregionsTable);
         //splitPane.setDividerPosition(10, 300);
@@ -279,16 +281,11 @@ public class Workspace extends AppWorkspaceComponent {
         subregionsTable.setOnMouseClicked(e -> {
             DataManager dataManager = (DataManager)app.getDataComponent();
             
-            
-            
             if (e.getClickCount() == 2) {
                 SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
                 mapController.processEditSubregion(it);
+                //subregionsTable.getSelectionModel().select(it);
             }
-            
-            
-            
-            
             
             if (selected) {
                 if(lastSelectedIndex == subregionsTable.getSelectionModel().getSelectedIndex()){
@@ -385,7 +382,7 @@ public class Workspace extends AppWorkspaceComponent {
           //HW6: gonna need to change the value of the border to something red I think? although if the other
           //polygons are drawn after, then this might be a problem...
           if (current.getPolygonList().contains(poly)) {
-              System.out.println("Current subregion selection has this polygon.");
+              //System.out.println("Current subregion selection has this polygon.");
               poly.setStroke(Color.RED);
               
           }
@@ -397,10 +394,7 @@ public class Workspace extends AppWorkspaceComponent {
           
           poly.toFront();
           
-          
           mapGroup.getChildren().addAll(poly);
-          
-          
           
         }
         
@@ -412,9 +406,7 @@ public class Workspace extends AppWorkspaceComponent {
         }
         
         changePolygonColors();
-        
-        
-        System.out.println("Paint:" + current.getPolygonList().get(0).getFill());
+        //System.out.println("Paint:" + current.getPolygonList().get(0).getFill());
         
         //dataManager.getPolygonList()
         //dataManager.getPolygonList().get(k+adder).setFill(Paint.valueOf(hexColorString2));
@@ -463,14 +455,14 @@ public class Workspace extends AppWorkspaceComponent {
     }
     
     @Override
-    public void newDialog() {
+    public boolean newDialog() {
         try {
             //mapController.setFileButtons();
-            mapController.processNewMapDialog();
+            return mapController.processNewMapDialog();
         } catch (IOException ex) {
             System.out.println("An error occurred loading the file.");
         }
-        
+        return false;
     }
     
     @Override
@@ -519,6 +511,9 @@ public class Workspace extends AppWorkspaceComponent {
         app.getGUI().getAppPane().setCenter(splitPane);
         
     }
+    public TableView<SubRegion> getSubregionsTable() {
+        return subregionsTable;
+    }
     
     @Override
     public void reloadWorkspace() {
@@ -526,7 +521,21 @@ public class Workspace extends AppWorkspaceComponent {
         DataManager dataManager = (DataManager)app.getDataComponent();
         FileManager fileManager = (FileManager)app.getFileComponent();
         
-            
+        //following few lines were added to allow for the editing of subregions to update the workspace / table
+        //subregionsTable.getItems().clear();
+        //System.out.println(dataManager.getSubregions().get(0).getCapitalName());
+        
+        
+        //if (!subregionsTable.getItems().isEmpty()) 
+        if (!dataManager.getSubregions().isEmpty()) {
+            //subregionsTable.getItems().clear();
+            subregionsTable.setItems(dataManager.getSubregions());
+            System.out.println("leader of sr 1: " + dataManager.getSubregions().get(0).getLeaderName());
+        }
+        
+        System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
+        
+        
         //clears the workspace
         //workspace.getChildren().clear();
         
