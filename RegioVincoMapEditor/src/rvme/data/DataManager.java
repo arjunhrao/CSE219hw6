@@ -25,7 +25,7 @@ public class DataManager implements AppDataComponent {
     //this arraylist will keep track of how many polygons are in each subregion, going in order (e.g. most should be 1)
     ArrayList<Integer> numPolygonsList = new ArrayList<>();
     //hw4
-    ObservableList<SubRegion> subregions = FXCollections.observableList(new ArrayList());
+    ObservableList<SubRegion> subregions;
     //hw5 - need to add some data values
     Color backgroundColor = Color.web("#0000FF");//blue
     Color borderColor = Color.BLACK;

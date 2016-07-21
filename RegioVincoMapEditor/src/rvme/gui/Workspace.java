@@ -228,7 +228,7 @@ public class Workspace extends AppWorkspaceComponent {
         // AND LINK THE COLUMNS TO THE DATA - figure out how to do this later with the PropertyValueFactory
         subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregion"));
         capitalNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("capital"));
-        leaderNameColumn.setCellValueFactory(new PropertyValueFactory<LocalDate, String>("leader"));
+        leaderNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("leader"));
         subregionsTable.getColumns().add(subregionNameColumn);
         subregionsTable.getColumns().add(capitalNameColumn);
         subregionsTable.getColumns().add(leaderNameColumn);
@@ -414,46 +414,6 @@ public class Workspace extends AppWorkspaceComponent {
         
     }
     
-    
-    public void processEvents() {
-
-        
-        renderPane.setOnMouseClicked(e -> {
-            double x = e.getSceneX();
-            double y = e.getSceneY();
-            if (e.getButton() == MouseButton.PRIMARY) {
-                mapController.processZoomIn(x, y, renderPane, xOrigin, yOrigin);
-            }
-            
-            if (e.getButton() == MouseButton.SECONDARY) {
-                mapController.processMapDimensions();
-            }
-        });
-        //checks if g has been pressed and then toggles the lines by switching the value of hasLines
-        app.getGUI().getPrimaryScene().setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.G) {
-                if (hasLines)
-                    hasLines = false;
-                else
-                    hasLines = true;
-                reloadWorkspace();
-            }
-            
-            if (e.getCode() == KeyCode.LEFT) {
-                mapController.processKeyLeft(renderPane);
-                reloadWorkspace();
-            }
-            if (e.getCode() == KeyCode.DOWN) {
-                mapController.processKeyDown(renderPane);
-                reloadWorkspace();
-            }
-            if (e.getCode() == KeyCode.RIGHT) {mapController.processKeyRight(renderPane);reloadWorkspace();}
-            if (e.getCode() == KeyCode.UP) {mapController.processKeyUp(renderPane);reloadWorkspace();}
-        });
-        
-        
-    }
-    
     @Override
     public boolean newDialog() {
         try {
@@ -529,8 +489,26 @@ public class Workspace extends AppWorkspaceComponent {
         //if (!subregionsTable.getItems().isEmpty()) 
         if (!dataManager.getSubregions().isEmpty()) {
             //subregionsTable.getItems().clear();
+            System.out.println("if statement entered.");
+            
+            System.out.println("leader of sr 1: " + dataManager.getSubregions().get(0).getLeaderName()
+                + "      ---- color of last one:" + dataManager.getSubregions().get(dataManager.getSubregions().size()-1).getSubregionColor().toString());
+            
+            System.out.println("number of sr's: " + dataManager.getSubregions().size());
+            System.out.println("size of table: " + subregionsTable.getItems().size());
+            
+            ObservableList<SubRegion> tempList = dataManager.getSubregions();
+            subregionsTable.getItems().clear();
+            
+            
+            System.out.println("tempList size:" + tempList.size());
+            System.out.println("clear worked.");
+            
+            System.out.println("number of sr's: " + dataManager.getSubregions().size());
+            System.out.println("size of table: " + subregionsTable.getItems().size());
+            
             subregionsTable.setItems(dataManager.getSubregions());
-            System.out.println("leader of sr 1: " + dataManager.getSubregions().get(0).getLeaderName());
+            System.out.println("set worked.");
         }
         
         System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
@@ -651,7 +629,7 @@ public class Workspace extends AppWorkspaceComponent {
         //hw5
         
         
-        subregionsTable.setItems(dataManager.getSubregions());
+        //subregionsTable.setItems(dataManager.getSubregions());
         
         //centerMap();
         
