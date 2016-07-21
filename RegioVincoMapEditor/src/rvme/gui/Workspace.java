@@ -226,7 +226,7 @@ public class Workspace extends AppWorkspaceComponent {
         
         subregionsTable = new TableView();
         // AND LINK THE COLUMNS TO THE DATA - figure out how to do this later with the PropertyValueFactory
-        subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregion"));
+        subregionNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("subregionName"));
         capitalNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("capital"));
         leaderNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("leader"));
         subregionsTable.getColumns().add(subregionNameColumn);
@@ -498,7 +498,7 @@ public class Workspace extends AppWorkspaceComponent {
             System.out.println("size of table: " + subregionsTable.getItems().size());
             
             ObservableList<SubRegion> tempList = dataManager.getSubregions();
-            subregionsTable.getItems().clear();
+            //subregionsTable.getItems().clear();
             
             
             System.out.println("tempList size:" + tempList.size());
@@ -507,7 +507,7 @@ public class Workspace extends AppWorkspaceComponent {
             System.out.println("number of sr's: " + dataManager.getSubregions().size());
             System.out.println("size of table: " + subregionsTable.getItems().size());
             
-            subregionsTable.setItems(dataManager.getSubregions());
+            //subregionsTable.setItems(dataManager.getSubregions());
             System.out.println("set worked.");
         }
         

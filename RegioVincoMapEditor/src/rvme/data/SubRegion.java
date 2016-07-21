@@ -38,9 +38,9 @@ public class SubRegion {
     //final BooleanProperty completed;
     
     //hw4
-    String capitalName = "";
-    String leaderName = "";
-    String subregionName = "";
+    String capitalName;
+    String leaderName;
+    String subregionName;
     //hw5
     Color subregionColor = Color.GREEN;
     String flagImagePath = "";
@@ -75,12 +75,15 @@ public class SubRegion {
     
     
     public SubRegion() {
-        subregion = new SimpleStringProperty("?");
-        leader = new SimpleStringProperty("?");
-        capital = new SimpleStringProperty("?");
-        //subregion = new SimpleStringProperty(subregionName);
-        //leader = new SimpleStringProperty(leaderName);
-        //capital = new SimpleStringProperty(capitalName);
+        //subregion = new SimpleStringProperty("?");
+        //leader = new SimpleStringProperty("?");
+        //capital = new SimpleStringProperty("?");
+        subregion = new SimpleStringProperty(subregionName);
+        leader = new SimpleStringProperty(leaderName);
+        capital = new SimpleStringProperty(capitalName);
+        subregion.setValue("");
+        capital.setValue("");
+        leader.setValue("");
         
         //actually, these are the only ones i need i think (since they are only needed for the table)
         //imageFlag = new SimpleStringProperty()
