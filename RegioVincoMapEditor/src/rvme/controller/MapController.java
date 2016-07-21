@@ -513,12 +513,12 @@ public class MapController {
         gridPane.add(leaderImageBox, 1, 3);
         
         if (!leaderImageFileName.exists()) {
-            leaderImageLabel.setText(leaderImageLabel.getText() + " " + leaderImageFileName + " does not exist.");
+            leaderImageBox.getChildren().add(new Label(leaderImageFileName + "\ndoesn't exist."));
             
         }
         if (!flagImageFileName.exists()) {
-            flagImageLabel.setText(flagImageLabel.getText() + " " + flagImageFileName + " does not exist.");
-            
+            flagImageBox.getChildren().add(new Label(flagImageFileName + "\ndoesn't exist."));
+            //flagImageLabel.setText("flag Image: " + flagImageFileName + " doesn't exist.");
         }
         
         //make and add prev and next buttons - NOTE: these buttons should be made outside later,

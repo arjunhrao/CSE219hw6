@@ -353,7 +353,7 @@ public class Workspace extends AppWorkspaceComponent {
             iv.setOnMouseClicked(e -> {
                 ImageView one = (ImageView)e.getSource();
                 dataManager.setSelectedImage(one);
-                dataManager.getSelectedImage().setEffect(new DropShadow(7.0, Color.LIGHTBLUE));
+                dataManager.getSelectedImage().setEffect(new DropShadow(40.0, Color.LIGHTBLUE));
                 
                 removeImageButton.setDisable(false);
                 removeImageButton.setOnAction(t -> {
@@ -413,19 +413,19 @@ public class Workspace extends AppWorkspaceComponent {
             changeBorderColorPicker.setFocusTraversable(false);
             
             if (e.getCode() == KeyCode.LEFT) {
-                mapGroup.setTranslateX(mapGroup.getTranslateX()-1.0);
+                mapGroup.setTranslateX(mapGroup.getTranslateX()-2.0);
                 reloadWorkspace();
             }
             if (e.getCode() == KeyCode.DOWN) {
-                mapGroup.setTranslateY(mapGroup.getTranslateY()+1.0);
+                mapGroup.setTranslateY(mapGroup.getTranslateY()+2.0);
                 reloadWorkspace();
             }
             if (e.getCode() == KeyCode.RIGHT) {
-                mapGroup.setTranslateX(mapGroup.getTranslateX()+1.0);
+                mapGroup.setTranslateX(mapGroup.getTranslateX()+2.0);
                 reloadWorkspace();
             }
             if (e.getCode() == KeyCode.UP) {
-                mapGroup.setTranslateY(mapGroup.getTranslateY()-1.0);
+                mapGroup.setTranslateY(mapGroup.getTranslateY()-2.0);
                 reloadWorkspace();
             }
         });
@@ -807,6 +807,7 @@ public class Workspace extends AppWorkspaceComponent {
             }
         }
         //hw5
+       
         
         
         //subregionsTable.setItems(dataManager.getSubregions());
@@ -854,6 +855,15 @@ public class Workspace extends AppWorkspaceComponent {
         mapGroup.setScaleY(dataManager.getZoom());
         
         stackPane.getChildren().add(mapGroup);
+        
+        for (ImageObject io : dataManager.getImageList()) {
+            //Image image = new Image("file:" + imagePath);
+            //ImageView im = new ImageView(image);
+            //stackPane.getChildren().add(im);
+            stackPane.getChildren().add(io.getImageView());
+            //stackPane has already been cleared, need to add the imageviews
+        }
+        app.getGUI().updateToolbarControls(false);
         //app.getGUI().getAppPane().setCenter(splitPane);
         
         

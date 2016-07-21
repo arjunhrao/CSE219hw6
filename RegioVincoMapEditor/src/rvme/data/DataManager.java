@@ -195,7 +195,7 @@ public class DataManager implements AppDataComponent {
     }
     public void setSelectedImage(ImageView imv) {
         if (selectedImage!=null) {
-            selectedImage
+            selectedImage.setEffect(new DropShadow(7.0, Color.TRANSPARENT));
         }
         selectedImage = imv;
         
