@@ -211,7 +211,7 @@ public class FileManager implements AppFileComponent {
         System.out.println("list size:" + list.size());
         
 	for (int i = 0; i < list.size(); i++) {
-            System.out.println("what");
+            //System.out.println("what");
 	    JsonObject subregion = list.getJsonObject(i);
 	    ArrayList<Polygon> temp;
             temp = loadSubregion(subregion);
@@ -351,6 +351,21 @@ public class FileManager implements AppFileComponent {
         //System.out.println(dataManager.getPolygonList().size());
         //Workspace workspace = (Workspace)dataManager.getMapEditorApp().getWorkspaceComponent();
         //workspace.centerMap();
+        
+        
+        
+        int adder = 0;
+        for (int k = 0; k < dataManager.getSubregions().size(); k++) {
+            System.out.println("k:" + k + "\n adder:" + adder);
+            dataManager.getSubregions().get(k).getPolygonList().add(dataManager.getPolygonList().get(k+adder));
+            
+            for (int i = 0; i < dataManager.getNumPolygonsList().get(k)-1; i++) {
+                dataManager.getSubregions().get(k).getPolygonList().add(dataManager.getPolygonList().get(k+adder+1));
+                adder++;
+                System.out.println("****" + (k+adder));
+            }
+            
+        }
     }
     
     public ArrayList<Polygon> loadSubregion(JsonObject obj) {

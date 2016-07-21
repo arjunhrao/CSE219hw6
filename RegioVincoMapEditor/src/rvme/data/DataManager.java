@@ -25,7 +25,7 @@ public class DataManager implements AppDataComponent {
     //this arraylist will keep track of how many polygons are in each subregion, going in order (e.g. most should be 1)
     ArrayList<Integer> numPolygonsList = new ArrayList<>();
     //hw4
-    ObservableList<SubRegion> subregions;
+    ObservableList<SubRegion> subregions = FXCollections.observableList(new ArrayList());
     //hw5 - need to add some data values
     Color backgroundColor = Color.web("#0000FF");//blue
     Color borderColor = Color.BLACK;
@@ -115,6 +115,8 @@ public class DataManager implements AppDataComponent {
         
         firstLoadForSliders = true;
         
+        workspace.getMapGroup().getChildren().clear();
+        workspace.getStackPane().getChildren().clear();
         
         //workspace.getRenderPane().setScaleX(1.0); //change to getMapPane? or don't need at all?
         //workspace.getRenderPane().setScaleY(1.0);

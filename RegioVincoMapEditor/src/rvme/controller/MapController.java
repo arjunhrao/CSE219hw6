@@ -623,7 +623,7 @@ public class MapController {
         addPolygonsToSubregions();
         System.out.println("first sr size:" + myManager.getSubregions().get(0).getPolygonList().size());
         System.out.println("last sr size:" + myManager.getSubregions().get(myManager.getSubregions().size()-1).getPolygonList().size());
-        workspace.reloadWorkspace();
+        //workspace.reloadWorkspace();
         
         System.out.println("reload complete");
         
@@ -631,6 +631,7 @@ public class MapController {
     }
     
     public void addPolygonsToSubregions() {
+        Workspace workspace = (Workspace)app.getWorkspaceComponent();
         myManager=(DataManager)app.getDataComponent();
         int adder = 0;
         for (int k = 0; k < myManager.getSubregions().size(); k++) {
@@ -645,6 +646,9 @@ public class MapController {
             
             
         }
+        
+        workspace.reloadWorkspace();
+        
     }
 
     public void processRandomizeMapColors() {

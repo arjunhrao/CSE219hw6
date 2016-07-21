@@ -93,6 +93,8 @@ public class Workspace extends AppWorkspaceComponent {
     public Slider getZoomSlider() {return zoomSlider;}
     public Group getMapGroup() {return mapGroup;}
     
+    
+    
     //Note: The new map implementation should be the hardest part and the first part you make sure works.
     //The rest should be easier.
     //Note that you can iterate through the subregions and set each polygon in their
@@ -395,6 +397,251 @@ public class Workspace extends AppWorkspaceComponent {
         }
     }
     
+    
+    
+    public void reloadWorkspaceFromNew() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        FileManager fileManager = (FileManager)app.getFileComponent();
+        dataManager.fillPolygons(Paint.valueOf("#556B2F"));
+        System.out.println("size from New: " + dataManager.getPolygonList().size());
+        stackPane.getChildren().remove(mapGroup);
+        mapGroup.getChildren().clear();
+        imagePane.getChildren().clear();
+        barPane.getChildren().clear();
+        
+        zoomSlider.setValue(100.0);
+        dataManager.setZoom(100.0);
+        
+        for (Polygon poly: dataManager.getPolygonList()) {
+          
+          //use the right width
+          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
+          
+          
+          mapGroup.getChildren().addAll(poly);
+          
+          System.out.println(mapGroup.getChildren().size());
+          
+          
+        }
+        dataManager.setBackgroundColor(Color.CORAL);
+        //centerMap();
+        app.getGUI().getAppPane().setCenter(splitPane);
+        
+    }
+    
+    @Override
+    public void reloadWorkspace() {
+        
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        FileManager fileManager = (FileManager)app.getFileComponent();
+        
+            
+        //clears the workspace
+        //workspace.getChildren().clear();
+        
+        //set the background to be lightblue
+        //workspace.setStyle("-fx-background-color: lightblue;");
+           
+        //fill polygons with green
+        dataManager.fillPolygons(Paint.valueOf("#556B2F"));
+        
+        //clears the pane so you can load something else
+        //hw5
+        
+        mapGroup.getChildren().clear();
+        stackPane.getChildren().clear();
+        //stackPane.getChildren().remove(mapGroup);
+        imagePane.getChildren().clear();
+        barPane.getChildren().clear();
+        
+        //update slider values
+        zoomSlider.setValue(dataManager.getZoom());
+        borderThickness.setValue(dataManager.getBorderThickness());
+        System.out.println(dataManager.getZoom());
+        //update colorpickers
+        changeBackgroundColorPicker.setValue(dataManager.getBackgroundColor());
+        changeBorderColorPicker.setValue(dataManager.getBorderColor());
+        
+        
+        if (dataManager.getFirstLoadForSliders()) {
+            zoomSlider.setValue(dataManager.getZoom());
+            dataManager.setFirstLoadForSliders(false);
+            //System.out.println(dataManager.getFirstLoadForSliders());
+            //System.out.println(dataManager.getPolygonList());
+            
+            //System.out.println(dataManager.getSubregions());
+            //System.out.println(dataManager.getSubregions().size());
+            //if (dataManager.getSubregions().get(0).getPolygonList().isEmpty()) {
+              //  System.out.println("asdf");
+                //mapController.addPolygonsToSubregions();
+            //}
+                
+        }
+        
+        if (!dataManager.getSubregions().isEmpty()) {
+            System.out.println("first sr size- " + dataManager.getSubregions().get(0).getPolygonList().size());
+            
+        }
+        else {
+            System.out.println("subregions list is empty");
+        }
+        //this if statement was added to make sure that the polygons have been added to subregions
+        //and does it if they haven't been.
+        //Or at least, that's what I want, but I'm getting an error, prob bc they're not initialized
+        //for the first run.
+        //if (!dataManager.getPolygonList().isEmpty() && !dataManager.getSubregions().isEmpty() && dataManager.getSubregions().get(0).getPolygonList().isEmpty())
+            //mapController.addPolygonsToSubregions();
+        
+        dataManager.setZoom(zoomSlider.getValue());
+        dataManager.setBorderThickness(borderThickness.getValue());
+        for (SubRegion sub: dataManager.getSubregions()) {
+            sub.setSubregionBorderThickness(borderThickness.getValue());
+        }
+        //add the polygons
+        Color tempBorderColor = dataManager.getBorderColor();
+        String hexBorderColorString = String.format( "#%02X%02X%02X",
+            (int)( tempBorderColor.getRed() * 255 ),
+            (int)( tempBorderColor.getGreen() * 255 ),
+            (int)( tempBorderColor.getBlue() * 255 ) );
+        for (Polygon poly: dataManager.getPolygonList()) {
+          //use the right color
+          poly.setStroke(Paint.valueOf(hexBorderColorString));
+          //use the right width
+          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
+          
+          mapGroup.getChildren().addAll(poly);
+          
+        }
+        //hw5
+        
+        
+        subregionsTable.setItems(dataManager.getSubregions());
+        
+        //centerMap();
+        
+        //HW5 - Taking into account the data. CenterMap() does this using the zoom data field in the manager.
+        //renderPane.setScaleX(4);
+        //renderPane.setScaleY(4);
+        //renderPane.setStyle("-fx-background-color: lightblue;");
+        Color tempColor = dataManager.getBackgroundColor();
+        String hexColorString = String.format( "#%02X%02X%02X",
+            (int)( tempColor.getRed() * 255 ),
+            (int)( tempColor.getGreen() * 255 ),
+            (int)( tempColor.getBlue() * 255 ) );
+        mapGroup.setStyle("-fx-background-color: " + hexColorString);
+        stackPane.setStyle("-fx-background-color: " + hexColorString);
+        //Now change color of the polygons/subregions as well
+        //System.out.println(dataManager.getPolygonList().size());
+        //System.out.println(dataManager.getSubregions().size());
+        
+        changePolygonColors();
+        //changeBorderColor();
+        
+        
+        //now set up the two necessary images where they need to be
+        String imagePath = dataManager.getCoatOfArmsImagePath();
+        String imagePath2 = dataManager.getRegionFlagImagePath();
+        if (!imagePath.equals("")) {
+            
+            Image image = new Image("file:" + imagePath);
+            ImageView im = new ImageView(image);
+            
+            imagePane.getChildren().add(im);
+            im.relocate(dataManager.getCoatOfArmsImagePos().getX(), dataManager.getCoatOfArmsImagePos().getY());
+        }
+        if (!imagePath2.equals("")) {
+            Image image = new Image("file:" + imagePath2);
+            ImageView im = new ImageView(image);
+            
+            imagePane.getChildren().add(im);
+            im.relocate(dataManager.getFlagImagePos().getX(), dataManager.getFlagImagePos().getY());
+        }
+        //now take a snapshot
+        
+        
+        //workspace.getChildren().addAll(renderPane);
+        
+        //clip it to avoid overflow
+        Rectangle clip = new Rectangle();
+        clip.setHeight(app.getGUI().getPrimaryScene().getHeight()-60);
+        clip.setWidth(app.getGUI().getPrimaryScene().getWidth());
+        clip.setLayoutX(0);
+        clip.setLayoutY(0);
+        //workspace.setClip(clip);
+        
+        //hw4
+        //workspace.getChildren().clear();
+        //splitPane.getItems().clear();
+        //editToolbar.getChildren().clear();
+        //initHW4Layout();
+        
+        System.out.println("size:" + mapGroup.getChildren().size());
+        mapGroup.setScaleX(dataManager.getZoom());
+        mapGroup.setScaleY(dataManager.getZoom());
+        
+        stackPane.getChildren().add(mapGroup);
+        //app.getGUI().getAppPane().setCenter(splitPane);
+        
+        
+        
+        
+    }
+    public void newRenderPane() {
+        renderPane = new Pane();
+    }
+
+    @Override
+    public void initStyle() {
+    }
+    
+    public void changePolygonColors() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        int adder = 0;
+        //above int marks how many extra polygons we are at in the numPolygonsList
+        //System.out.println(dataManager.getSubregions().size());
+        for (int k = 0; k < dataManager.getSubregions().size(); k++) {
+            //given time i should put this into my filemanager (loading +colors, meaning load datamanager info before polygons)
+            //if (dataManager.getSubregions().get(k) == null || dataManager.getPolygonList().get(k) == null)
+                //break;
+            Color tempColor2 = dataManager.getSubregions().get(k).getSubregionColor();
+            String hexColorString2 = String.format( "#%02X%02X%02X",
+                (int)( tempColor2.getRed() * 255 ),
+                (int)( tempColor2.getGreen() * 255 ),
+                (int)( tempColor2.getBlue() * 255 ) );
+            dataManager.getPolygonList().get(k+adder).setFill(Paint.valueOf(hexColorString2));
+            //System.out.println((k+adder) + ":" + hexColorString2);
+            //System.out.println("---" + (dataManager.getNumPolygonsList().get(k)-1));
+            for (int i = 0; i < dataManager.getNumPolygonsList().get(k)-1; i++) {
+                //System.out.println(" this is i: " + i);
+                dataManager.getPolygonList().get(k+adder+1).setFill(Paint.valueOf(hexColorString2));
+                adder++;
+                //System.out.println("****" + (k+adder) + ":" + hexColorString2);
+            }
+            
+        }
+        
+    }
+    
+    public void changeBorderColor() {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        Color tempColor2 = dataManager.getBorderColor();
+        String hexColorString2 = String.format( "#%02X%02X%02X",
+            (int)( tempColor2.getRed() * 255 ),
+            (int)( tempColor2.getGreen() * 255 ),
+            (int)( tempColor2.getBlue() * 255 ) );
+    }
+    
+    public void removeButtons() {
+        FlowPane fp = (FlowPane)app.getGUI().getAppPane().getTop();
+        fp.getChildren().remove(2);
+        fp.getChildren().remove(0);
+    }
+    
+    public Pane getRenderPane() {
+        return renderPane;
+    }
+    
     public void centerMap() {
         //center the map and zoom based on the zoom variable
         DataManager dataManager = (DataManager)app.getDataComponent();
@@ -498,213 +745,5 @@ public class Workspace extends AppWorkspaceComponent {
         //a failed experiment. The center points are not reflective of the actual points. Should I
         //just adjust it for the difference?
         
-    }
-    
-    public void reloadWorkspaceFromNew() {
-        DataManager dataManager = (DataManager)app.getDataComponent();
-        FileManager fileManager = (FileManager)app.getFileComponent();
-        dataManager.fillPolygons(Paint.valueOf("#556B2F"));
-        System.out.println("size from New: " + dataManager.getPolygonList().size());
-        mapGroup.getChildren().clear();
-        imagePane.getChildren().clear();
-        barPane.getChildren().clear();
-        
-        zoomSlider.setValue(100.0);
-        dataManager.setZoom(100.0);
-        
-        for (Polygon poly: dataManager.getPolygonList()) {
-          
-          //use the right width
-          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
-          
-          
-          mapGroup.getChildren().addAll(poly);
-          
-          System.out.println(mapGroup.getChildren().size());
-          
-          
-        }
-        dataManager.setBackgroundColor(Color.CORAL);
-        //centerMap();
-        app.getGUI().getAppPane().setCenter(splitPane);
-        
-    }
-    
-    @Override
-    public void reloadWorkspace() {
-        
-        DataManager dataManager = (DataManager)app.getDataComponent();
-        FileManager fileManager = (FileManager)app.getFileComponent();
-        
-            
-        //clears the workspace
-        //workspace.getChildren().clear();
-        
-        //set the background to be lightblue
-        //workspace.setStyle("-fx-background-color: lightblue;");
-           
-        //fill polygons with green
-        dataManager.fillPolygons(Paint.valueOf("#556B2F"));
-        
-        //clears the pane so you can load something else
-        //hw5
-        mapGroup.getChildren().clear();
-        imagePane.getChildren().clear();
-        barPane.getChildren().clear();
-        
-        //update slider values
-        if (dataManager.getFirstLoadForSliders()) {
-            zoomSlider.setValue(dataManager.getZoom());
-            dataManager.setFirstLoadForSliders(false);
-            System.out.println(dataManager.getFirstLoadForSliders());
-        }
-        
-        dataManager.setZoom(zoomSlider.getValue());
-        dataManager.setBorderThickness(borderThickness.getValue());
-        for (SubRegion sub: dataManager.getSubregions()) {
-            sub.setSubregionBorderThickness(borderThickness.getValue());
-        }
-        //add the polygons
-        Color tempBorderColor = dataManager.getBorderColor();
-        String hexBorderColorString = String.format( "#%02X%02X%02X",
-            (int)( tempBorderColor.getRed() * 255 ),
-            (int)( tempBorderColor.getGreen() * 255 ),
-            (int)( tempBorderColor.getBlue() * 255 ) );
-        for (Polygon poly: dataManager.getPolygonList()) {
-          //use the right color
-          poly.setStroke(Paint.valueOf(hexBorderColorString));
-          //use the right width
-          poly.setStrokeWidth(dataManager.getSubregions().get(0).getSubregionBorderThickness());
-          
-          mapGroup.getChildren().addAll(poly);
-          
-        }
-        //hw5
-        
-        
-        subregionsTable.setItems(dataManager.getSubregions());
-        
-        //centerMap();
-        
-        //HW5 - Taking into account the data. CenterMap() does this using the zoom data field in the manager.
-        //renderPane.setScaleX(4);
-        //renderPane.setScaleY(4);
-        //renderPane.setStyle("-fx-background-color: lightblue;");
-        Color tempColor = dataManager.getBackgroundColor();
-        String hexColorString = String.format( "#%02X%02X%02X",
-            (int)( tempColor.getRed() * 255 ),
-            (int)( tempColor.getGreen() * 255 ),
-            (int)( tempColor.getBlue() * 255 ) );
-        mapGroup.setStyle("-fx-background-color: " + hexColorString);
-        stackPane.setStyle("-fx-background-color: " + hexColorString);
-        //Now change color of the polygons/subregions as well
-        //System.out.println(dataManager.getPolygonList().size());
-        //System.out.println(dataManager.getSubregions().size());
-        
-        changePolygonColors();
-        //changeBorderColor();
-        
-        
-        //now set up the two necessary images where they need to be
-        String imagePath = dataManager.getCoatOfArmsImagePath();
-        String imagePath2 = dataManager.getRegionFlagImagePath();
-        if (!imagePath.equals("")) {
-            
-            Image image = new Image("file:" + imagePath);
-            ImageView im = new ImageView(image);
-            
-            imagePane.getChildren().add(im);
-            im.relocate(dataManager.getCoatOfArmsImagePos().getX(), dataManager.getCoatOfArmsImagePos().getY());
-        }
-        if (!imagePath2.equals("")) {
-            Image image = new Image("file:" + imagePath2);
-            ImageView im = new ImageView(image);
-            
-            imagePane.getChildren().add(im);
-            im.relocate(dataManager.getFlagImagePos().getX(), dataManager.getFlagImagePos().getY());
-        }
-        //now take a snapshot
-        
-        
-        //workspace.getChildren().addAll(renderPane);
-        
-        //clip it to avoid overflow
-        Rectangle clip = new Rectangle();
-        clip.setHeight(app.getGUI().getPrimaryScene().getHeight()-60);
-        clip.setWidth(app.getGUI().getPrimaryScene().getWidth());
-        clip.setLayoutX(0);
-        clip.setLayoutY(0);
-        //workspace.setClip(clip);
-        
-        //hw4
-        //workspace.getChildren().clear();
-        //splitPane.getItems().clear();
-        //editToolbar.getChildren().clear();
-        //initHW4Layout();
-        
-        System.out.println("size:" + mapGroup.getChildren().size());
-        mapGroup.setScaleX(200.0);
-        mapGroup.setScaleY(200.0);
-        
-        stackPane.getChildren().add(mapGroup);
-        //app.getGUI().getAppPane().setCenter(splitPane);
-        
-        
-        
-        
-    }
-    public void newRenderPane() {
-        renderPane = new Pane();
-    }
-
-    @Override
-    public void initStyle() {
-    }
-    
-    public void changePolygonColors() {
-        DataManager dataManager = (DataManager)app.getDataComponent();
-        int adder = 0;
-        //above int marks how many extra polygons we are at in the numPolygonsList
-        //System.out.println(dataManager.getSubregions().size());
-        for (int k = 0; k < dataManager.getSubregions().size(); k++) {
-            //given time i should put this into my filemanager (loading +colors, meaning load datamanager info before polygons)
-            //if (dataManager.getSubregions().get(k) == null || dataManager.getPolygonList().get(k) == null)
-                //break;
-            Color tempColor2 = dataManager.getSubregions().get(k).getSubregionColor();
-            String hexColorString2 = String.format( "#%02X%02X%02X",
-                (int)( tempColor2.getRed() * 255 ),
-                (int)( tempColor2.getGreen() * 255 ),
-                (int)( tempColor2.getBlue() * 255 ) );
-            dataManager.getPolygonList().get(k+adder).setFill(Paint.valueOf(hexColorString2));
-            //System.out.println((k+adder) + ":" + hexColorString2);
-            //System.out.println("---" + (dataManager.getNumPolygonsList().get(k)-1));
-            for (int i = 0; i < dataManager.getNumPolygonsList().get(k)-1; i++) {
-                //System.out.println(" this is i: " + i);
-                dataManager.getPolygonList().get(k+adder+1).setFill(Paint.valueOf(hexColorString2));
-                adder++;
-                //System.out.println("****" + (k+adder) + ":" + hexColorString2);
-            }
-            
-        }
-        
-    }
-    
-    public void changeBorderColor() {
-        DataManager dataManager = (DataManager)app.getDataComponent();
-        Color tempColor2 = dataManager.getBorderColor();
-        String hexColorString2 = String.format( "#%02X%02X%02X",
-            (int)( tempColor2.getRed() * 255 ),
-            (int)( tempColor2.getGreen() * 255 ),
-            (int)( tempColor2.getBlue() * 255 ) );
-    }
-    
-    public void removeButtons() {
-        FlowPane fp = (FlowPane)app.getGUI().getAppPane().getTop();
-        fp.getChildren().remove(2);
-        fp.getChildren().remove(0);
-    }
-    
-    public Pane getRenderPane() {
-        return renderPane;
     }
 }
