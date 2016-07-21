@@ -135,6 +135,7 @@ public class FileManager implements AppFileComponent {
             borderColorGreen = String.valueOf(dataManager.getBorderColor().getGreen());
         }
         
+        //System.out.println(mapName,parentDir,rawMapPath)
         
 	// NOW BUILD THE JSON ARRAY FOR THE LIST
 	JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
@@ -311,7 +312,9 @@ public class FileManager implements AppFileComponent {
         
         //hw5 - this was added to load the polygon data
         loadPolygonData(dataManager, json.getString("raw_map_path"));
-                
+        
+        
+        
         //Put each relevant string/datafield into the datamanager
         //woops. should've just been doing this, not what I did for the rest... oh well, I'll do it right in the array
         dataManager.setMapName(json.getString("map_name"));

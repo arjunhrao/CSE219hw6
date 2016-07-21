@@ -80,6 +80,7 @@ public class MapController {
     TextField subregionName;
     TextField leader;
     TextField capital;
+    String tempMapName;
     
     public MapController(AppTemplate initApp) {
 	app = initApp;
@@ -723,6 +724,7 @@ public class MapController {
         
         setFileButtons();
         
+        
         //myManager.setRawMapPath(selectedFile.getAbsolutePath());
         //System.out.println("new map:" + selectedFile.getAbsolutePath());
         //FileChooser fc = new FileChooser();
@@ -739,6 +741,8 @@ public class MapController {
         if (result.isPresent() && result.get() == okButtonType) {
             //you pressed ok. Your files and textfields should have changed.
             //Now, you need to create the map using the file.
+            //myManager.setMapName(mapName.getText());
+            tempMapName = mapName.getText();
             
             createMap();
             
@@ -781,12 +785,12 @@ public class MapController {
             SubRegion sr = new SubRegion("Subregion" + (j+1), "", "");
             myManager.getSubregions().add(sr);
         }
+        myManager.setMapName(tempMapName);
+        myManager.setParentDirectory(selectedParentDir.getAbsolutePath());
+        myManager.setRawMapPath(selectedFile.getAbsolutePath());
         
-        System.out.println("first subregion size:" + myManager.getSubregions().get(0).getPolygonList().size());
-        //add the appropriate polygons
-        addPolygonsToSubregions();
-        System.out.println("first sr size:" + myManager.getSubregions().get(0).getPolygonList().size());
-        System.out.println("last sr size:" + myManager.getSubregions().get(myManager.getSubregions().size()-1).getPolygonList().size());
+        File x = new File(selectedParentDir.getAbsolutePath()+"//" + tempMapName);
+        x.mkdir();
         //workspace.reloadWorkspace();
         
         System.out.println("reload complete");
@@ -852,7 +856,7 @@ public class MapController {
             parentDirectory.setText(selectedParentDir.getAbsolutePath());
             //if (selectedFile != null)
                 //okbtn.setDisable(false);
-            
+            myManager.setParentDirectory(selectedParentDir.getAbsolutePath());
         });
         
         dfButton.setOnAction(e -> {

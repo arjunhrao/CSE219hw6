@@ -1,6 +1,6 @@
 
 {
-    "name":"Andorra",
+    "name":"AndorraTest",
     "subregions_have_capitals":true,
     "subregions_have_flags":true,
     "subregions_have_leaders":true,
@@ -9,57 +9,57 @@
             "name":"savetestOrdino",
             "capital":"Ordino (town)",
             "leader":"Ventura Espot",
-            "red":200,
-            "green":200,
-            "blue":200
+            "red":109,
+            "green":109,
+            "blue":109
         },
         {
             "name":"Canillo",
             "capital":"Canillo (town)",
             "leader":"Enric Casadevall Medrano",
-            "red":198,
-            "green":198,
-            "blue":198
+            "red":217,
+            "green":217,
+            "blue":217
         },
         {
             "name":"Encamp",
             "capital":"Encamp (town)",
             "leader":"Miquel Alís Font",
-            "red":196,
-            "green":196,
-            "blue":196
+            "red":181,
+            "green":181,
+            "blue":181
         },
         {
             "name":"Escaldes-Engordany",
             "capital":"Escaldes-Engordany (town)",
             "leader":"Montserrat Capdevila Pallarés",
-            "red":194,
-            "green":194,
-            "blue":194
+            "red":145,
+            "green":145,
+            "blue":145
         },
         {
             "name":"La Massana",
             "capital":"La Massana (town)",
             "leader":"Josep Areny",
-            "red":192,
-            "green":192,
-            "blue":192
+            "red":37,
+            "green":37,
+            "blue":37
         },
         {
             "name":"Andorra la Vella",
             "capital":"Andorra la Vella (town)",
             "leader":"Maria Rosa Ferrer Obiols",
-            "red":190,
-            "green":190,
-            "blue":190
+            "red":1,
+            "green":1,
+            "blue":1
         },
         {
             "name":"Sant Julia de Loria",
             "capital":"Sant Julia de Loria (town)",
             "leader":"Josep Pintat Forné",
-            "red":188,
-            "green":188,
-            "blue":188
+            "red":73,
+            "green":73,
+            "blue":73
         }
     ]
 }

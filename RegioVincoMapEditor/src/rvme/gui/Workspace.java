@@ -8,6 +8,7 @@ package rvme.gui;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -51,6 +52,11 @@ import static saf.settings.AppStartupConstants.PATH_IMAGES;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
 import rvme.data.ImageObject;
 import rvme.file.FileManager;
 
@@ -189,7 +195,7 @@ public class Workspace extends AppWorkspaceComponent {
         randomizeMapColorsButton = app.getGUI().initChildButton(editToolbar, RANDOMIZE_MAP_COLORS.toString(), RANDOMIZE_MAP_COLORS_TT.toString(), false);
         changeMapDimensionsButton = app.getGUI().initChildButton(editToolbar, CHANGE_MAP_DIMENSIONS.toString(), CHANGE_MAP_DIMENSIONS_TT.toString(), false);
         playAnthemButton = app.getGUI().initChildButton(editToolbar, PLAY_ANTHEM.toString(), PLAY_ANTHEM_TT.toString(), false);
-        pauseAnthemButton = app.getGUI().initChildButton(editToolbar, PAUSE_ANTHEM.toString(), PAUSE_ANTHEM_TT.toString(), false);
+        pauseAnthemButton = app.getGUI().initChildButton(editToolbar, PAUSE_ANTHEM.toString(), PAUSE_ANTHEM_TT.toString(), true);
         //add the colorpicking stuff after all of the buttons but before the sliders
         editToolbar.getChildren().add(colorPickingToolbar);
         editToolbar.setHgap(1.0);
@@ -403,8 +409,9 @@ public class Workspace extends AppWorkspaceComponent {
     
     public void processHW4Events() {
         renameMapButton.setOnAction(e -> {
+            app.getGUI().updateToolbarControls(false);
             DataManager dataManager = (DataManager)app.getDataComponent();
-            TextInputDialog dialog = new TextInputDialog("Map Name");
+            TextInputDialog dialog = new TextInputDialog(dataManager.getMapName());
             dialog.setTitle("Map Name");
             dialog.setHeaderText("Rename Map");
             dialog.setContentText("Please enter the map name you'd like to change to:");
@@ -412,13 +419,41 @@ public class Workspace extends AppWorkspaceComponent {
             // Traditional way to get the response value.
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()){
-                System.out.println("Your name: " + result.get());
+                System.out.println("Your map name: " + result.get());
+                dataManager.setMapName(result.get());
+                //RENAME FILES AND STUFF
             }
+            
         });
         playAnthemButton.setOnAction(e -> {
+            
             DataManager dataManager = (DataManager)app.getDataComponent();
-            dataManager.getMapName()
+            
+            //dont forget to change to parent dir
+            String midiPath = dataManager.getPath()+"/" +dataManager.getMapName() + ".mid";
+            System.out.println(midiPath);
+            
+            Sequence sequence;
+            try {
+                sequence = MidiSystem.getSequence(new File(midiPath));
+                Sequencer sequencer = MidiSystem.getSequencer();
+                sequencer.open();
+                sequencer.setSequence(sequence);
+                sequencer.start();
+                
+            } catch (InvalidMidiDataException ex) {
+                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MidiUnavailableException ex) {
+                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+            
         });
+        
         app.getGUI().getPrimaryScene().setOnKeyPressed(e -> {
             borderThickness.setFocusTraversable(false);
             zoomSlider.setFocusTraversable(false);
@@ -470,6 +505,7 @@ public class Workspace extends AppWorkspaceComponent {
                 if (subregionsTable.getSelectionModel().getSelectedItem() != null) {
                     SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
                     mapController.processEditSubregion(it);
+                    app.getGUI().updateToolbarControls(false);
                 }
                 //subregionsTable.getSelectionModel().select(it);
             }
@@ -630,10 +666,12 @@ public class Workspace extends AppWorkspaceComponent {
         //EXPORT IMAGE!! snapshot?
         DataManager dataManager = (DataManager)app.getDataComponent();
         FileManager fileManager = (FileManager)app.getFileComponent();
-        String filePath = "./export/The World/temp/" + dataManager.getMapName() + ".rvm";
-        
+        //String filePath = "./export/The World/temp/" + dataManager.getMapName() + ".rvm";
+        //String filePath = dataManager.getPath()+"/" + dataManager.getMapName()+"/" + dataManager.getMapName() + ".rvm";
+        String filePath = dataManager.getPath()+"/" + dataManager.getMapName()+".rvm";
         try {
             fileManager.exportData(dataManager, filePath);
+            
         } catch (IOException ex) {
             Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -798,6 +836,7 @@ public class Workspace extends AppWorkspaceComponent {
             if (e.getClickCount() == 2) {
                 SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
                 mapController.processEditSubregion(it);
+                app.getGUI().updateToolbarControls(false);
             }
             setPolygonOnMouseClicked(poly);
           });

@@ -37,6 +37,7 @@ public class DataManager implements AppDataComponent {
     //doubles width and height? and zoom?
     Double borderThickness = .01;
     String rawMapPath = "";
+    String exportPath = "";
     
     Double mapPositionX = 0.0;
     Double mapPositionY = 0.0;
@@ -206,6 +207,18 @@ public class DataManager implements AppDataComponent {
     
     public ObservableList<SubRegion> getSubregions() {
 	return subregions;
+    }
+
+    @Override
+    public String getPath() {
+        exportPath = parentDirectory + "/" + mapName;
+        System.out.println(exportPath);
+        return exportPath;
+    }
+
+    @Override
+    public String getAbstractMapName() {
+        return getMapName();
     }
     
 }
