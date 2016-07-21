@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -51,6 +52,10 @@ public class SubRegion {
     ArrayList<Polygon> subregionPolygonList = new ArrayList<>();
     
     //r,g,b doubles
+    public Property capitalProperty() {return capital;}
+    public Property leaderProperty() {return leader;}
+    public Property subregionProperty() {return subregion;}
+    
     public void setCapitalName(String s) {//capitalName = s;
     capital.setValue(s);}
     public void setSubregionBorderThickness(Double d) {subregionBorderThickness = d;}
@@ -58,9 +63,13 @@ public class SubRegion {
     public void setFlagImagePath(String s) {flagImagePath = s;}
     public void setLeaderImagePath(String s) {leaderImagePath = s;}
     public void setLeaderName(String s) {//leaderName = s;
-    leader.setValue(s);}
+        leader.setValue(s);
+        setLeaderImagePath("./export/The World/Europe/Andorra/" + getLeaderName() + ".png");
+    }
     public void setSubregionName(String s) {//subregionName = s;
-    subregion.setValue(s);}
+        subregion.setValue(s);
+        setFlagImagePath("./export/The World/Europe/Andorra/" + getSubregionName() + " Flag.png");
+    }
     
     public ArrayList<Polygon> getPolygonList() {
         return subregionPolygonList;

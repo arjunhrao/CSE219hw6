@@ -22,6 +22,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -70,8 +71,10 @@ public class Workspace extends AppWorkspaceComponent {
     Color tempColor = Color.BLACK;
     int tempIndex = -1;
     double orgSceneX, orgSceneY;
-            double orgTranslateX, orgTranslateY;
+    double orgTranslateX, orgTranslateY;
+    double imageX, imageY;
     
+            
     //HW4
     SplitPane splitPane = new SplitPane();
     FlowPane editToolbar = new FlowPane();
@@ -100,11 +103,31 @@ public class Workspace extends AppWorkspaceComponent {
     
     boolean selected;
     int lastSelectedIndex;
+
+    public boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public int getLastSelectedIndex() {
+        return lastSelectedIndex;
+    }
+
+    public void setLastSelectedIndex(int lastSelectedIndex) {
+        this.lastSelectedIndex = lastSelectedIndex;
+    }
+    
     
     public Slider getBorderThicknessSlider() {return borderThickness;}
     public Slider getZoomSlider() {return zoomSlider;}
     public Group getMapGroup() {return mapGroup;}
+    public int getTempIndex() {return tempIndex;//note that tempIndex stores the index of the currently selected subregion
     
+    }
+    public void setTempIndex(int a) {tempIndex = a;} 
     
     
     //Note: The new map implementation should be the hardest part and the first part you make sure works.
@@ -194,7 +217,7 @@ public class Workspace extends AppWorkspaceComponent {
         DataManager dataManager = (DataManager)app.getDataComponent();
         borderThickness.setValue(dataManager.getBorderThickness());
         zoomSlider.setValue(dataManager.getZoom());
-        System.out.println("bt:" + dataManager.getBorderThickness() + " ---- zoom:" + dataManager.getZoom());
+        //System.out.println("bt:" + dataManager.getBorderThickness() + " ---- zoom:" + dataManager.getZoom());
         
         Label borderThicknessLabel = new Label("Border Thickness:");
         Label zoomLabel = new Label("Zoom:");
@@ -251,8 +274,8 @@ public class Workspace extends AppWorkspaceComponent {
         //commented out for //hw5 dataManager.getSubregions().add(nj);
         
         //System.out.println(x.getCapitalName());
-        subregionsTable.setItems(dataManager.getSubregions());
-        System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
+        //subregionsTable.setItems(dataManager.getSubregions());
+        //System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
         
         //splitPane.getItems().addAll(subregionsTable);
         //splitPane.setDividerPosition(10, 300);
@@ -287,30 +310,23 @@ public class Workspace extends AppWorkspaceComponent {
         
         DataManager dataManager = (DataManager)app.getDataComponent();
         String imagePath = file.getAbsolutePath();
-        if (!imagePath.equals("")) {
-            
+        if (!imagePath.equals("") && file != null) {
             Image image = new Image("file:" + imagePath);
-            ImageView im = new ImageView(image);
-            
-            stackPane.getChildren().add(im);
-            //im.relocate(10,10);
-            ImageObject imObj = new ImageObject(im, 0, 0, imagePath);
-            dataManager.getImageList().add(imObj);
-            
-            
-            //handle the image
-            im.setOnMousePressed(e -> {
+            ImageView iv = new ImageView(image);
+            iv.toFront();
+            stackPane.getChildren().add(iv);
+            ImageObject io = new ImageObject(iv, 0.0, 0.0, imagePath);
+            dataManager.getImageList().add(io);
+            iv.setOnMousePressed(e -> {
                 orgSceneX = e.getSceneX();
                 orgSceneY = e.getSceneY();
                 orgTranslateX = ((ImageView)(e.getSource())).getTranslateX();
                 orgTranslateY = ((ImageView)(e.getSource())).getTranslateY();
                 //System.out.println("scenex:" + orgSceneX + ",sceney:" + orgSceneY);
                 //System.out.println("transx:" + orgTranslateX + ",transy:" + orgTranslateY);
-                System.out.println(imObj.getX() + imObj.getY());
+                //System.out.println(imObj.getX() + imObj.getY());
             });
-            
-            
-            im.setOnMouseDragged(e -> {
+            iv.setOnMouseDragged(e -> {
                 double offsetX = e.getSceneX() - orgSceneX;
                 double offsetY = e.getSceneY() - orgSceneY;
                 double newTranslateX = orgTranslateX + offsetX;
@@ -320,14 +336,102 @@ public class Workspace extends AppWorkspaceComponent {
                 ((ImageView)(e.getSource())).setTranslateY(newTranslateY);
                 //imObj.setX(((ImageView)(e.getSource())).getTranslateX());
                 //imObj.setY(((ImageView)(e.getSource())).getTranslateY());
+                imageX = newTranslateX;
+                imageY = newTranslateY;
+            });
+            iv.setOnMouseReleased(e -> {
+                //try {
+                //imageBeingMoved(imagePath);
+                for (ImageObject image2 : dataManager.getImageList()) {
+                    if (image2.getImagePath().equals(imagePath)) {
+                        image2.setX(imageX);image2.setY(imageY);
+                    }
+                }
+                //} catch
+                
+            });
+            iv.setOnMouseClicked(e -> {
+                ImageView one = (ImageView)e.getSource();
+                dataManager.setSelectedImage(one);
+                dataManager.getSelectedImage().setEffect(new DropShadow(7.0, Color.LIGHTBLUE));
+                
+                removeImageButton.setDisable(false);
+                removeImageButton.setOnAction(t -> {
+                    //changed();
+                    app.getGUI().updateToolbarControls(false);
+
+                    removeImage(io.getImagePath());
+                    iv.setImage(null);
+                    removeImageButton.setDisable(true);
+                });
             });
             
-            
+            /*
+                for (ImageObject io : dataManager.getImageList()) {
+                    Image image = new Image("file:" + imagePath);
+                    ImageView im = new ImageView(image);
+
+                    stackPane.getChildren().add(im);
+                    //im.relocate(10,10);
+                    ImageObject imObj = new ImageObject(im, 0, 0, imagePath);
+                    dataManager.getImageList().add(imObj);
+            */
+
+
+                    //handle the image
         }
     }
     
+        
+    public void removeImage(String two) {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        int count = 0;
+        for(ImageObject o : dataManager.getImageList()) {
+            if(two.equals(o.getImagePath())) {
+                break;
+            }
+            count++;
+        }
+        dataManager.getImageList().remove(counter);
+    }
+    
     public void processHW4Events() {
+        app.getGUI().getPrimaryScene().setOnKeyPressed(e -> {
+            borderThickness.setFocusTraversable(false);
+            zoomSlider.setFocusTraversable(false);
+            subregionsTable.setFocusTraversable(false);
+            renameMapButton.setFocusTraversable(false);
+            addImageButton.setFocusTraversable(false);
+            removeImageButton.setFocusTraversable(false);
+            //changeBackgroundColorButton.setFocusTraversable(false);
+            //changeBorderColorButton.setFocusTraversable(false);
+            randomizeMapColorsButton.setFocusTraversable(false);
+            changeMapDimensionsButton.setFocusTraversable(false);
+            playAnthemButton.setFocusTraversable(false);
+            pauseAnthemButton.setFocusTraversable(false);
+            changeBackgroundColorPicker.setFocusTraversable(false);
+            changeBorderColorPicker.setFocusTraversable(false);
+            
+            if (e.getCode() == KeyCode.LEFT) {
+                mapGroup.setTranslateX(mapGroup.getTranslateX()-1.0);
+                reloadWorkspace();
+            }
+            if (e.getCode() == KeyCode.DOWN) {
+                mapGroup.setTranslateY(mapGroup.getTranslateY()+1.0);
+                reloadWorkspace();
+            }
+            if (e.getCode() == KeyCode.RIGHT) {
+                mapGroup.setTranslateX(mapGroup.getTranslateX()+1.0);
+                reloadWorkspace();
+            }
+            if (e.getCode() == KeyCode.UP) {
+                mapGroup.setTranslateY(mapGroup.getTranslateY()-1.0);
+                reloadWorkspace();
+            }
+        });
         addImageButton.setOnAction(e -> {
+            //changed();
+            //deselectRegion();
             addImage();
         });
         
@@ -339,8 +443,10 @@ public class Workspace extends AppWorkspaceComponent {
             DataManager dataManager = (DataManager)app.getDataComponent();
             
             if (e.getClickCount() == 2) {
-                SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
-                mapController.processEditSubregion(it);
+                if (subregionsTable.getSelectionModel().getSelectedItem() != null) {
+                    SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
+                    mapController.processEditSubregion(it);
+                }
                 //subregionsTable.getSelectionModel().select(it);
             }
             
@@ -365,8 +471,11 @@ public class Workspace extends AppWorkspaceComponent {
             
             if (selected) {
                 int currentSubRegionIndex = subregionsTable.getSelectionModel().getSelectedIndex();
-                reloadMapFromTable(currentSubRegionIndex);
-                
+                try {
+                    reloadMapFromTable(currentSubRegionIndex, true);
+                } 
+                catch(ArrayIndexOutOfBoundsException x) {System.out.println("Array is out of Bounds");}
+                System.out.println("#CSRI _____ " + currentSubRegionIndex);
             }
             
         });
@@ -424,10 +533,20 @@ public class Workspace extends AppWorkspaceComponent {
         
     }
     
-    public void reloadMapFromTable(int index) {
+    public void reloadMapFromTable(int index, boolean usualLoad) {
         DataManager dataManager = (DataManager)app.getDataComponent();
-        SubRegion current = dataManager.getSubregions().get(index);
-        tempIndex = index;
+        SubRegion current;
+        //this block of code was put in because sometimes the line two lines down from here was getting
+        //arrayoutofbounds exceptions. Not sure why though. It only happened after closing a subregion
+        //edit dialog i think, but I could be wrong.
+        if ((index > -1 && index < dataManager.getSubregions().size()) || usualLoad) {
+            current = dataManager.getSubregions().get(index);
+            tempIndex = index;
+        }
+        else {
+            current = dataManager.getSubregions().get(tempIndex);
+        }
+        
         Color tempBorderColor = dataManager.getBorderColor();
         String hexBorderColorString = String.format( "#%02X%02X%02X",
             (int)( tempBorderColor.getRed() * 255 ),
@@ -548,25 +667,25 @@ public class Workspace extends AppWorkspaceComponent {
             //subregionsTable.getItems().clear();
             System.out.println("if statement entered.");
             
-            System.out.println("leader of sr 1: " + dataManager.getSubregions().get(0).getLeaderName()
-                + "      ---- color of last one:" + dataManager.getSubregions().get(dataManager.getSubregions().size()-1).getSubregionColor().toString());
+            //System.out.println("leader of sr 1: " + dataManager.getSubregions().get(0).getLeaderName()
+                //+ "      ---- color of last one:" + dataManager.getSubregions().get(dataManager.getSubregions().size()-1).getSubregionColor().toString());
             
-            System.out.println("number of sr's: " + dataManager.getSubregions().size());
-            System.out.println("size of table: " + subregionsTable.getItems().size());
+            //System.out.println("number of sr's: " + dataManager.getSubregions().size());
+            //System.out.println("size of table: " + subregionsTable.getItems().size());
             
-            ObservableList<SubRegion> tempList = dataManager.getSubregions();
-            //subregionsTable.getItems().clear();
+            subregionsTable.getItems().clear();
+            //System.out.println("clear worked.");
             
+            for (int g = 0; g < dataManager.getSubregions().size(); g++) {
+                subregionsTable.getItems().add(dataManager.getSubregions().get(g));
+            }
             
-            System.out.println("tempList size:" + tempList.size());
-            System.out.println("clear worked.");
-            
-            System.out.println("number of sr's: " + dataManager.getSubregions().size());
-            System.out.println("size of table: " + subregionsTable.getItems().size());
+            //System.out.println("number of sr's: " + dataManager.getSubregions().size());
+            //System.out.println("size of table: " + subregionsTable.getItems().size());
             
             //subregionsTable.setItems(dataManager.getSubregions());
-            System.out.println("set worked.");
-            System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
+            //System.out.println("set worked.");
+            //System.out.println("initTable(): subregions size: " + dataManager.getSubregions());
         }
         
         
@@ -618,7 +737,7 @@ public class Workspace extends AppWorkspaceComponent {
         
        //this was for testing i guess 
         if (!dataManager.getSubregions().isEmpty()) {
-            System.out.println("first sr size- " + dataManager.getSubregions().get(0).getPolygonList().size());
+            //System.out.println("first sr size- " + dataManager.getSubregions().get(0).getPolygonList().size());
             
         }
         else {

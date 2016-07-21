@@ -23,6 +23,11 @@ public class ImageObject {
         imagePath = initPath;
     }
     
+    public String getImagePath() {
+        return imagePath;
+    }
+    public void setImageView(ImageView imV) {iv = imV;}
+    public ImageView getImageView() {return iv;}
     public void setX(double newX) {x = newX;}
     public void setY(double newY) {y = newY;}
     public double getX() {return x;}

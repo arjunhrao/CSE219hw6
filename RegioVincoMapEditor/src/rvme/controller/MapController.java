@@ -65,11 +65,21 @@ public class MapController {
     double ccY = 0.0;
     Button pdButton;
     Button dfButton;
+    Button prevButton;
+    Button nextButton;
     TextField mapName;
     TextField dataFile;
+    Label capitalLabel;
+    Label leaderLabel;
+    Label nameLabel;
     TextField parentDirectory;
     File selectedParentDir;
     File selectedFile;
+    boolean testing = true;
+    int currentIndex = 0;
+    TextField subregionName;
+    TextField leader;
+    TextField capital;
     
     public MapController(AppTemplate initApp) {
 	app = initApp;
@@ -415,11 +425,11 @@ public class MapController {
     }
 
     public void processEditSubregion(SubRegion it) {
-        
+        System.out.println("\n-----------Edit subregion started:" + it.getLeaderName());
         
         // ENABLE/DISABLE THE PROPER BUTTONS
 	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	workspace.reloadWorkspace();
+	//workspace.reloadWorkspace();
         myManager=(DataManager)app.getDataComponent();
         
         //need a popup dialogue box with multiple input fields for all of the necessary data
@@ -442,13 +452,13 @@ public class MapController {
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(20, 150, 10, 10));
         
-        TextField subregionName = new TextField();
-        TextField leader = new TextField();
-        TextField capital = new TextField();
+        subregionName = new TextField();
+        leader = new TextField();
+        capital = new TextField();
 
-        Label nameLabel = new Label(props.getProperty(SUBREGION_NAME_PROMPT_LABEL));
-        Label leaderLabel = new Label(props.getProperty(LEADER_PROMPT_LABEL));
-        Label capitalLabel = new Label(props.getProperty(CAPITAL_PROMPT_LABEL));
+        nameLabel = new Label(props.getProperty(SUBREGION_NAME_PROMPT_LABEL));
+        leaderLabel = new Label(props.getProperty(LEADER_PROMPT_LABEL));
+        capitalLabel = new Label(props.getProperty(CAPITAL_PROMPT_LABEL));
         addSheetsToLabel(nameLabel, "subregion_name_prompt_label");
         addSheetsToLabel(leaderLabel, "leader_prompt_label");
         addSheetsToLabel(capitalLabel, "capital_prompt_label");
@@ -457,8 +467,9 @@ public class MapController {
         subregionName.setText(it.getSubregionName());
         leader.setText(it.getLeaderName());
         capital.setText(it.getCapitalName());
+        //testing
+        System.out.println(leader.getText());
         
-        SubRegion mySubRegion = new SubRegion();
         
         gridPane.add(nameLabel, 0, 0);
         gridPane.add(subregionName, 1, 0);
@@ -513,11 +524,22 @@ public class MapController {
         //make and add prev and next buttons - NOTE: these buttons should be made outside later,
         //need to be able to access them. Also, maybe make a separate class for the subregion dialog.
         FlowPane nextPrevPane = new FlowPane();
-        Button prevButton = app.getGUI().initChildButton(nextPrevPane, PREV_BUTTON.toString(), PREV_BUTTON_TT.toString(), false);
-        Button nextButton = app.getGUI().initChildButton(nextPrevPane, NEXT_BUTTON.toString(), NEXT_BUTTON_TT.toString(), false);
-
+        prevButton = app.getGUI().initChildButton(nextPrevPane, PREV_BUTTON.toString(), PREV_BUTTON_TT.toString(), false);
+        nextButton = app.getGUI().initChildButton(nextPrevPane, NEXT_BUTTON.toString(), NEXT_BUTTON_TT.toString(), false);
+        
+        //disable/enable the right next or previous buttons
+        if (myManager.getSubregions().indexOf(it) == 0)
+            prevButton.setDisable(true);
+        if (myManager.getSubregions().indexOf(it) == myManager.getSubregions().size()-1)
+            nextButton.setDisable(true);
+        
         //nextPrevPane.getChildren().add(new Label("asdf"));
         gridPane.add(nextPrevPane, 0, 4);
+        
+        handlePrevNextButtons(prevButton, nextButton, dialog, it);
+        
+        currentIndex = myManager.getSubregions().indexOf(it);
+        System.out.println("\t\t\t------current:" + currentIndex);
         
         dialog.getDialogPane().setContent(gridPane);
         Optional<ButtonType> result = dialog.showAndWait();
@@ -539,11 +561,120 @@ public class MapController {
             
             
             //workspace.getSubregionsTable().setItems(myManager.getSubregions());
+            
+            //update the selection
             System.out.println(myManager.getSubregions().get(0).getSubregionName());
-            workspace.reloadWorkspace();
+            //workspace.setLastSelectedIndex(srIndex);
+            //workspace.setTempIndex(srIndex);
+            //workspace.setSelected(true);
+            //workspace.getSubregionsTable().getSelectionModel().clearSelection();
+            //workspace.getSubregionsTable().getSelectionModel().select(srIndex);
+            
+            //This code is really messy but it's ok. It actually doesn't really do anything,
+            //except the last line after reloadWorkspace that forces a deselect, making double-clicking
+            //on polygons retain selection and double clicking on table items not. This is okay because
+            //I can say I wanted to implement both. It's better than leaving it with the double clicking
+            //on the table --> OK leading to pseudo-highlighting the first subregion.
+            //Actually, I fixed it by setting selected. Hooray!
+            System.out.println("##srIndex to be selected after closing dialog: " +srIndex);
+            //workspace.getSubregionsTable().getSelectionModel().clearSelection();
+            //workspace.reloadWorkspace();
+            workspace.getSubregionsTable().getSelectionModel().clearSelection();
+            
+            System.out.println(workspace.getSelected());
+            workspace.setSelected(false);
+            workspace.setTempIndex(srIndex);
+            workspace.setLastSelectedIndex(srIndex);
+            
+            workspace.reloadMapFromTable(srIndex, true);
+            //System.out.println(workspace.getSelected());
+            workspace.getSubregionsTable().getSelectionModel().select(srIndex);
+            //System.out.println(workspace.getSelected());
             //useless line of code: app.getWorkspaceComponent().getWorkspace().getChildren().clear();
         }
         
+    }
+    
+    public void handlePrevNextButtons(Button prev, Button next, Dialog<ButtonType> dialog, SubRegion it) {
+        prev.setOnAction(e -> {
+            
+            Workspace workspace = (Workspace)app.getWorkspaceComponent();
+            myManager=(DataManager)app.getDataComponent();
+            
+            if (workspace.getTempIndex() != 0) {
+                //dialog.close();
+                
+                int srIndex2 = myManager.getSubregions().indexOf(it);
+                SubRegion sr = myManager.getSubregions().get(srIndex2);
+                sr.setCapitalName(capital.getText());
+                sr.setLeaderName(leader.getText());
+                sr.setSubregionName(subregionName.getText());
+                System.out.println("prev test: " + sr.getLeaderName());
+                //copy pasted code from my edit subregion to make the right things occur when your
+                //dialog closes
+                System.out.println("* * * * * selected index in controller:" + workspace.getTempIndex());
+                
+                //workspace.getSubregionsTable().getSelectionModel().clearSelection();
+                //workspace.reloadWorkspace();
+                workspace.getSubregionsTable().getSelectionModel().clearSelection();
+
+                System.out.println(workspace.getSelected());
+                workspace.setSelected(false);
+                workspace.setTempIndex(srIndex2);
+                workspace.reloadMapFromTable(srIndex2, true);
+                //System.out.println(workspace.getSelected());
+                workspace.getSubregionsTable().getSelectionModel().select(srIndex2);
+                System.out.println(" * *#* * temp index - 1: " + (workspace.getTempIndex()-1) + ",srIndex2:"+srIndex2);
+                SubRegion newIt = myManager.getSubregions().get(workspace.getTempIndex()-1);
+                System.out.println(newIt.getLeaderName());
+                //SubRegion newIt = myManager.getSubregions().get(srIndex - 1);
+                //workspace.setTempIndex(workspace.getTempIndex()-1);
+                //SubRegion it = workspace.getSubregionsTable().getSelectionModel().getSelectedItem();
+                processEditSubregion(newIt);
+                dialog.close();
+                
+            }
+            
+        });
+        next.setOnAction(e -> {
+            Workspace workspace = (Workspace)app.getWorkspaceComponent();
+            myManager=(DataManager)app.getDataComponent();
+            
+            if (workspace.getTempIndex() != myManager.getSubregions().size()-1) {
+                //dialog.close();
+                
+                int srIndex2 = myManager.getSubregions().indexOf(it);
+                SubRegion sr = myManager.getSubregions().get(srIndex2);
+                sr.setCapitalName(capital.getText());
+                sr.setLeaderName(leader.getText());
+                sr.setSubregionName(subregionName.getText());
+                System.out.println("prev test: " + sr.getLeaderName());
+                //copy pasted code from my edit subregion to make the right things occur when your
+                //dialog closes
+                System.out.println("* * * * * selected index in controller:" + workspace.getTempIndex());
+                
+                //workspace.getSubregionsTable().getSelectionModel().clearSelection();
+                //workspace.reloadWorkspace();
+                workspace.getSubregionsTable().getSelectionModel().clearSelection();
+
+                System.out.println(workspace.getSelected());
+                workspace.setSelected(false);
+                workspace.setTempIndex(srIndex2);
+                workspace.reloadMapFromTable(srIndex2, true);
+                //System.out.println(workspace.getSelected());
+                workspace.getSubregionsTable().getSelectionModel().select(srIndex2);
+                System.out.println(" * *#* * temp index + 1: " + (workspace.getTempIndex()+1) + ",srIndex2:"+srIndex2);
+                SubRegion newIt = myManager.getSubregions().get(workspace.getTempIndex()+1);
+                System.out.println(newIt.getLeaderName());
+                //SubRegion newIt = myManager.getSubregions().get(srIndex - 1);
+                //workspace.setTempIndex(workspace.getTempIndex()-1);
+                //SubRegion it = workspace.getSubregionsTable().getSelectionModel().getSelectedItem();
+                processEditSubregion(newIt);
+                dialog.close();
+                
+            }
+
+        });
     }
 
     public boolean processNewMapDialog() throws IOException {

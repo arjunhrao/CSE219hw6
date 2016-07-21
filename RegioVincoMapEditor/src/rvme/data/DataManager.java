@@ -5,7 +5,9 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -49,6 +51,8 @@ public class DataManager implements AppDataComponent {
     Point2D coatOfArmsImagePos = new Point2D(0.0,0.0);
     
     boolean firstLoadForSliders = true;
+    
+    ImageView selectedImage = null;
     
     public MapEditorApp getMapEditorApp() {return app;}
     
@@ -98,6 +102,7 @@ public class DataManager implements AppDataComponent {
         polygonList.clear();
         numPolygonsList.clear();
         subregions.clear();
+        imageList.clear();
         backgroundColor = Color.web("#FFFFFF");//blue
         borderColor = Color.BLACK;
         mapName = "";
@@ -188,9 +193,19 @@ public class DataManager implements AppDataComponent {
             }
 
     }
-    
+    public void setSelectedImage(ImageView imv) {
+        if (selectedImage!=null) {
+            selectedImage
+        }
+        selectedImage = imv;
+        
+    }
+    public ImageView getSelectedImage() {
+        return selectedImage;
+    }
     
     public ObservableList<SubRegion> getSubregions() {
 	return subregions;
     }
+    
 }
