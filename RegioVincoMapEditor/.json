@@ -1,0 +1,25 @@
+
+{
+    "map_name":"",
+    "parent_directory":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor",
+    "background_color_red":"1.0",
+    "background_color_blue":"1.0",
+    "background_color_green":"1.0",
+    "border_color_blue":"0.0",
+    "border_color_red":"0.0",
+    "border_color_green":"0.0",
+    "raw_map_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/raw_map_data/Andorra.json",
+    "region_flag_image_path":"",
+    "coat_of_arms_image_path":"",
+    "map_position_x":0.0,
+    "map_position_y":0.0,
+    "flag_image_pos_x":0.0,
+    "flag_image_pos_y":0.0,
+    "coa_image_pos_x":0.0,
+    "coa_image_pos_y":0.0,
+    "zoom":460.06451612903226,
+    "subregions":[
+    ],
+    "images":[
+    ]
+}

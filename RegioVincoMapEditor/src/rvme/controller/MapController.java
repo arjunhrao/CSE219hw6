@@ -380,9 +380,11 @@ public class MapController {
         gridPane.setPadding(new Insets(20, 150, 10, 10));
         
         TextField width = new TextField();
+        width.setText(String.valueOf(myManager.getDimWidth()));
         //Note: the next two commented lines of code set the prompty text, which is nice but unnecessary
         //category.setPromptText(props.getProperty(CATEGORY_PROMPT));
         TextField height = new TextField();
+        height.setText(String.valueOf(myManager.getDimHeight()));
         //description.setPromptText("Description");
 
         Label widthLabel = new Label(props.getProperty(WIDTH_PROMPT_LABEL));
@@ -390,7 +392,7 @@ public class MapController {
         addSheetsToLabel(widthLabel, "width_prompt_label");
         addSheetsToLabel(heightLabel, "height_prompt_label");
         
-        SubRegion mySubRegion = new SubRegion();
+       
         
         gridPane.add(widthLabel, 0, 0);
         gridPane.add(width, 1, 0);
@@ -403,6 +405,12 @@ public class MapController {
         if (result.isPresent() && result.get() == okButtonType) {
             //set and save the data to myItem and add it to the arraylist in the datamanager obj myManager
             //use mysubregion? check the other controller
+            double w = Double.parseDouble(width.getText());
+            double h = Double.parseDouble(height.getText());
+            System.out.println("*******w-" + w + "h-" + h);
+            myManager.setDimWidth(w);
+            myManager.setDimHeight(h);
+            
             
             //enable the save button
             //HW4: app.getGUI().getSaveButton().setDisable(false);
@@ -550,8 +558,8 @@ public class MapController {
             int srIndex = myManager.getSubregions().indexOf(it);
             SubRegion sr = myManager.getSubregions().get(srIndex);
             sr.setCapitalName(capital.getText());
-            sr.setLeaderName(leader.getText());
-            sr.setSubregionName(subregionName.getText());
+            sr.setLeaderName(leader.getText(), myManager.getPath());
+            sr.setSubregionName(subregionName.getText(), myManager.getPath());
             
             
             //enable the save button
@@ -608,8 +616,8 @@ public class MapController {
                 int srIndex2 = myManager.getSubregions().indexOf(it);
                 SubRegion sr = myManager.getSubregions().get(srIndex2);
                 sr.setCapitalName(capital.getText());
-                sr.setLeaderName(leader.getText());
-                sr.setSubregionName(subregionName.getText());
+                sr.setLeaderName(leader.getText(), myManager.getPath());
+                sr.setSubregionName(subregionName.getText(), myManager.getPath());
                 System.out.println("prev test: " + sr.getLeaderName());
                 //copy pasted code from my edit subregion to make the right things occur when your
                 //dialog closes
@@ -647,8 +655,8 @@ public class MapController {
                 int srIndex2 = myManager.getSubregions().indexOf(it);
                 SubRegion sr = myManager.getSubregions().get(srIndex2);
                 sr.setCapitalName(capital.getText());
-                sr.setLeaderName(leader.getText());
-                sr.setSubregionName(subregionName.getText());
+                sr.setLeaderName(leader.getText(), myManager.getPath());
+                sr.setSubregionName(subregionName.getText(), myManager.getPath());
                 System.out.println("prev test: " + sr.getLeaderName());
                 //copy pasted code from my edit subregion to make the right things occur when your
                 //dialog closes

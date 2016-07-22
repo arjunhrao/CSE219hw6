@@ -1,0 +1,118 @@
+
+{
+    "map_name":"TestCountry",
+    "parent_directory":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor",
+    "background_color_red":"0.3019607961177826",
+    "background_color_blue":"0.800000011920929",
+    "background_color_green":"0.4000000059604645",
+    "border_color_blue":"0.9490196108818054",
+    "border_color_red":"0.9490196108818054",
+    "border_color_green":"0.9490196108818054",
+    "raw_map_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/raw_map_data/Slovakia.json",
+    "region_flag_image_path":"",
+    "coat_of_arms_image_path":"",
+    "map_position_x":2.0,
+    "map_position_y":-132.0,
+    "flag_image_pos_x":0.0,
+    "flag_image_pos_y":0.0,
+    "coa_image_pos_x":0.0,
+    "coa_image_pos_y":0.0,
+    "zoom":27.516129032258068,
+    "subregions":[
+        {
+            "subregion_name":"Subregion1",
+            "capital_name":"asdf",
+            "leader_name":"adsf",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion1 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/adsf.png",
+            "red":"0.7333333492279053",
+            "blue":"0.7333333492279053",
+            "green":"0.7333333492279053",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion2",
+            "capital_name":"f",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion2 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.24705882370471954",
+            "blue":"0.24705882370471954",
+            "green":"0.24705882370471954",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion3",
+            "capital_name":"asdfcvxz",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion3 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.8549019694328308",
+            "blue":"0.8549019694328308",
+            "green":"0.8549019694328308",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion4",
+            "capital_name":"vcxz",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion4 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.3686274588108063",
+            "blue":"0.3686274588108063",
+            "green":"0.3686274588108063",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion5",
+            "capital_name":"z",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion5 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.003921568859368563",
+            "blue":"0.003921568859368563",
+            "green":"0.003921568859368563",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion6",
+            "capital_name":"x",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion6 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.4901960790157318",
+            "blue":"0.4901960790157318",
+            "green":"0.4901960790157318",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion7",
+            "capital_name":"cv",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion7 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.6117647290229797",
+            "blue":"0.6117647290229797",
+            "green":"0.6117647290229797",
+            "border_thickness":"0.02532258064516129"
+        },
+        {
+            "subregion_name":"Subregion8",
+            "capital_name":"v",
+            "leader_name":"",
+            "flag_image_path":"./export/The World/Europe/Andorra/Subregion8 Flag.png",
+            "leader_image_path":"./export/The World/Europe/Andorra/.png",
+            "red":"0.125490203499794",
+            "blue":"0.125490203499794",
+            "green":"0.125490203499794",
+            "border_thickness":"0.02532258064516129"
+        }
+    ],
+    "images":[
+        {
+            "image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/export/The World/Europe/Albania Flag.png",
+            "x_pos":149.0,
+            "y_pos":135.0
+        }
+    ]
+}

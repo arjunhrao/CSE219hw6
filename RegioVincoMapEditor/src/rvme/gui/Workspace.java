@@ -80,7 +80,10 @@ public class Workspace extends AppWorkspaceComponent {
     double orgSceneX, orgSceneY;
     double orgTranslateX, orgTranslateY;
     double imageX, imageY;
-    
+    Sequence sequence;
+    Sequencer sequencer;
+    Rectangle one;
+    Rectangle two;
             
     //HW4
     SplitPane splitPane = new SplitPane();
@@ -238,6 +241,16 @@ public class Workspace extends AppWorkspaceComponent {
         
         //set up the split pane
         initTableAndImage(); //also adds the table to the split pane
+        
+        
+        //dimensions
+        one = new Rectangle(802,536);
+        stackPane.getChildren().add(one);
+        one.setFill(Color.TRANSPARENT);
+        two=new Rectangle(one.getWidth(),one.getHeight());
+        two.layoutXProperty().bind(one.layoutXProperty());
+        two.layoutYProperty().bind(one.layoutYProperty());
+        stackPane.setClip(two);
         
         //add the split pane to the workspace
         //splitPane.setStyle("-fx-background-color: blue;");
@@ -421,36 +434,10 @@ public class Workspace extends AppWorkspaceComponent {
             if (result.isPresent()){
                 System.out.println("Your map name: " + result.get());
                 dataManager.setMapName(result.get());
+                File x = new File(dataManager.getParentDirectory()+"//" + result.get());
+                x.mkdir();
                 //RENAME FILES AND STUFF
             }
-            
-        });
-        playAnthemButton.setOnAction(e -> {
-            
-            DataManager dataManager = (DataManager)app.getDataComponent();
-            
-            //dont forget to change to parent dir
-            String midiPath = dataManager.getPath()+"/" +dataManager.getMapName() + ".mid";
-            System.out.println(midiPath);
-            
-            Sequence sequence;
-            try {
-                sequence = MidiSystem.getSequence(new File(midiPath));
-                Sequencer sequencer = MidiSystem.getSequencer();
-                sequencer.open();
-                sequencer.setSequence(sequence);
-                sequencer.start();
-                
-            } catch (InvalidMidiDataException ex) {
-                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MidiUnavailableException ex) {
-                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            
             
         });
         
@@ -471,19 +458,27 @@ public class Workspace extends AppWorkspaceComponent {
             changeBorderColorPicker.setFocusTraversable(false);
             
             if (e.getCode() == KeyCode.LEFT) {
+                DataManager dataManager = (DataManager)app.getDataComponent();
                 mapGroup.setTranslateX(mapGroup.getTranslateX()-2.0);
+                dataManager.setPosX(mapGroup.getTranslateX());
                 reloadWorkspace();
             }
             if (e.getCode() == KeyCode.DOWN) {
+                DataManager dataManager = (DataManager)app.getDataComponent();
                 mapGroup.setTranslateY(mapGroup.getTranslateY()+2.0);
+                dataManager.setPosY(mapGroup.getTranslateY());
                 reloadWorkspace();
             }
             if (e.getCode() == KeyCode.RIGHT) {
+                DataManager dataManager = (DataManager)app.getDataComponent();
                 mapGroup.setTranslateX(mapGroup.getTranslateX()+2.0);
+                dataManager.setPosX(mapGroup.getTranslateX());
                 reloadWorkspace();
             }
             if (e.getCode() == KeyCode.UP) {
+                DataManager dataManager = (DataManager)app.getDataComponent();
                 mapGroup.setTranslateY(mapGroup.getTranslateY()-2.0);
+                dataManager.setPosY(mapGroup.getTranslateY());
                 reloadWorkspace();
             }
         });
@@ -668,6 +663,7 @@ public class Workspace extends AppWorkspaceComponent {
         FileManager fileManager = (FileManager)app.getFileComponent();
         //String filePath = "./export/The World/temp/" + dataManager.getMapName() + ".rvm";
         //String filePath = dataManager.getPath()+"/" + dataManager.getMapName()+"/" + dataManager.getMapName() + ".rvm";
+        
         String filePath = dataManager.getPath()+"/" + dataManager.getMapName()+".rvm";
         try {
             fileManager.exportData(dataManager, filePath);
@@ -677,14 +673,23 @@ public class Workspace extends AppWorkspaceComponent {
         }
     }
     
-    
-    
-    public void reloadWorkspaceFromNew() {
+    public void reloadWorkspaceFromNew() throws IOException {reset();reloadWorkspace();}
+    public void reset() throws IOException {
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        FileManager fileManager = (FileManager)app.getFileComponent();
+        fileManager.saveData(dataManager, dataManager.getPath()+"/"+dataManager.getMapName()+".json");
+        fileManager.loadData(dataManager, dataManager.getPath()+"/"+dataManager.getMapName()+".json");
+        
+        
+        //saveWork(new File(app.getDataComponent().getPath()+"/" + app.getDataComponent().getAbstractMapName()+".json"));
+    }
+    public void reloadWorkspaceFromNew2() {
         DataManager dataManager = (DataManager)app.getDataComponent();
         FileManager fileManager = (FileManager)app.getFileComponent();
         dataManager.fillPolygons(Paint.valueOf("#556B2F"));
         System.out.println("size from New: " + dataManager.getPolygonList().size());
-        stackPane.getChildren().remove(mapGroup);
+        //stackPane.getChildren().remove(mapGroup);
+        stackPane.getChildren().clear();
         mapGroup.getChildren().clear();
         imagePane.getChildren().clear();
         barPane.getChildren().clear();
@@ -700,7 +705,15 @@ public class Workspace extends AppWorkspaceComponent {
           
           mapGroup.getChildren().addAll(poly);
           
-          System.out.println(mapGroup.getChildren().size());
+          /**poly.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                SubRegion it = subregionsTable.getSelectionModel().getSelectedItem();
+                mapController.processEditSubregion(it);
+                app.getGUI().updateToolbarControls(false);
+            }
+            setPolygonOnMouseClicked(poly);
+          }); */
+          
           
           
         }
@@ -718,6 +731,56 @@ public class Workspace extends AppWorkspaceComponent {
         
         DataManager dataManager = (DataManager)app.getDataComponent();
         FileManager fileManager = (FileManager)app.getFileComponent();
+        
+        
+        
+        playAnthemButton.setOnAction(e -> {
+            //dont forget to change to parent dir
+            String midiPath = dataManager.getPath()+"/" +dataManager.getMapName() + ".mid";
+            System.out.println(midiPath);
+            
+            
+            try {
+                sequence = MidiSystem.getSequence(new File(midiPath));
+                sequencer = MidiSystem.getSequencer();
+                sequencer.open();
+                sequencer.setSequence(sequence);
+                sequencer.start();
+                playAnthemButton.setDisable(true);
+                pauseAnthemButton.setDisable(false);
+                
+            } catch (InvalidMidiDataException ex) {
+                System.out.println(ex.getMessage());
+                //Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+                //Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MidiUnavailableException ex) {
+                System.out.println(ex.getMessage());
+                //Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        });
+        pauseAnthemButton.setOnAction(e -> {
+            
+            //dont forget to change to parent dir
+            String midiPath = dataManager.getPath()+"/" +dataManager.getMapName() + ".mid";
+            System.out.println("xdxd" + midiPath);
+            
+            try {
+                if (sequencer == null) {
+                } else {
+                    sequencer.stop();
+                }
+                playAnthemButton.setDisable(false);
+                pauseAnthemButton.setDisable(true);
+                
+            } catch (Exception a) {}
+        });
+        
+        
+        
+        
         
         //following few lines were added to allow for the editing of subregions to update the workspace / table
         //subregionsTable.getItems().clear();
@@ -760,6 +823,14 @@ public class Workspace extends AppWorkspaceComponent {
         //stackPane.getChildren().remove(mapGroup);
         imagePane.getChildren().clear();
         barPane.getChildren().clear();
+        
+        //dimensions
+        two.setWidth(dataManager.getDimWidth());
+        two.setHeight(dataManager.getDimHeight());
+        System.out.println("two w:" + two.getWidth());
+        //setwidth and height dim on ok
+        //reloaddimensions
+        reloadDimension();
         
         //update slider values
         zoomSlider.setValue(dataManager.getZoom());
@@ -892,6 +963,8 @@ public class Workspace extends AppWorkspaceComponent {
         System.out.println("size:" + mapGroup.getChildren().size());
         mapGroup.setScaleX(dataManager.getZoom());
         mapGroup.setScaleY(dataManager.getZoom());
+        mapGroup.setTranslateX(dataManager.getMapPositionX());
+        mapGroup.setTranslateY(dataManager.getMapPositionY());
         
         stackPane.getChildren().add(mapGroup);
         
@@ -1082,6 +1155,19 @@ public class Workspace extends AppWorkspaceComponent {
         fp.getChildren().remove(0);
     }
     
+    public void reloadDimension() {
+        //dimensions
+        DataManager dataManager = (DataManager)app.getDataComponent();
+        one = new Rectangle(dataManager.getDimWidth(), dataManager.getDimHeight());
+        stackPane.getChildren().add(one);
+        one.setFill(Color.TRANSPARENT);
+        two = new Rectangle(one.getWidth(), one.getHeight());
+        two.layoutXProperty().bind(one.layoutXProperty());
+        two.layoutYProperty().bind(one.layoutYProperty());
+        stackPane.setClip(two);
+        //reloadWorkspace();
+    }
+    
     public Pane getRenderPane() {
         return renderPane;
     }
@@ -1137,6 +1223,7 @@ public class Workspace extends AppWorkspaceComponent {
         mapGroup.setScaleY(dataManager.getZoom());
         
         //center on the circle
+        
         double h = app.getGUI().getPrimaryScene().getHeight()/2+30;
         double w = app.getGUI().getPrimaryScene().getWidth()/4;
         

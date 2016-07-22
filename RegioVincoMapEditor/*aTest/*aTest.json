@@ -1,0 +1,102 @@
+
+{
+    "map_name":"*aTest",
+    "parent_directory":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor",
+    "background_color_red":"1.0",
+    "background_color_blue":"1.0",
+    "background_color_green":"1.0",
+    "border_color_blue":"0.0",
+    "border_color_red":"0.0",
+    "border_color_green":"0.0",
+    "raw_map_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/raw_map_data/Andorra.json",
+    "region_flag_image_path":"",
+    "coat_of_arms_image_path":"",
+    "map_position_x":-76.0,
+    "map_position_y":-20.0,
+    "flag_image_pos_x":0.0,
+    "flag_image_pos_y":0.0,
+    "coa_image_pos_x":0.0,
+    "coa_image_pos_y":0.0,
+    "zoom":375.5,
+    "subregions":[
+        {
+            "subregion_name":"Subregion1",
+            "capital_name":"a",
+            "leader_name":"adf",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion1 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/adf.png",
+            "red":"0.003921568859368563",
+            "blue":"0.003921568859368563",
+            "green":"0.003921568859368563",
+            "border_thickness":"0.05709677419354838"
+        },
+        {
+            "subregion_name":"Subregion2",
+            "capital_name":"b",
+            "leader_name":"asdf",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion2 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/asdf.png",
+            "red":"0.8509804010391235",
+            "blue":"0.8509804010391235",
+            "green":"0.8509804010391235",
+            "border_thickness":"0.05709677419354838"
+        },
+        {
+            "subregion_name":"Subregion3",
+            "capital_name":"c",
+            "leader_name":"",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion3 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/.png",
+            "red":"0.4274509847164154",
+            "blue":"0.4274509847164154",
+            "green":"0.4274509847164154",
+            "border_thickness":"0.05709677419354838"
+        },
+        {
+            "subregion_name":"Subregion4",
+            "capital_name":"d",
+            "leader_name":"",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion4 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/.png",
+            "red":"0.2862745225429535",
+            "blue":"0.2862745225429535",
+            "green":"0.2862745225429535",
+            "border_thickness":"0.05709677419354838"
+        },
+        {
+            "subregion_name":"Subregion5",
+            "capital_name":"e",
+            "leader_name":"",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion5 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/.png",
+            "red":"0.5686274766921997",
+            "blue":"0.5686274766921997",
+            "green":"0.5686274766921997",
+            "border_thickness":"0.05709677419354838"
+        },
+        {
+            "subregion_name":"Subregion6",
+            "capital_name":"f",
+            "leader_name":"",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion6 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/.png",
+            "red":"0.7098039388656616",
+            "blue":"0.7098039388656616",
+            "green":"0.7098039388656616",
+            "border_thickness":"0.05709677419354838"
+        },
+        {
+            "subregion_name":"Subregion7",
+            "capital_name":"g",
+            "leader_name":"",
+            "flag_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/Subregion7 Flag.png",
+            "leader_image_path":"/Users/ravirao/NetBeansProjects/HW6/hw6/RegioVincoMapEditor/*aTest/.png",
+            "red":"0.14509804546833038",
+            "blue":"0.14509804546833038",
+            "green":"0.14509804546833038",
+            "border_thickness":"0.05709677419354838"
+        }
+    ],
+    "images":[
+    ]
+}

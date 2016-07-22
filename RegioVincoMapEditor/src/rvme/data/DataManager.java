@@ -39,6 +39,8 @@ public class DataManager implements AppDataComponent {
     String rawMapPath = "";
     String exportPath = "";
     
+    Double dimWidth = 802.0;
+    Double dimHeight = 536.0;
     Double mapPositionX = 0.0;
     Double mapPositionY = 0.0;
     Double zoom = 1.0;
@@ -96,7 +98,10 @@ public class DataManager implements AppDataComponent {
         //List list2 = new ArrayList();
         //polygonList = FXCollections.observableList(list2);
     }
-    
+    public double getDimHeight(){return dimHeight;}
+    public double getDimWidth() {return dimWidth;}
+    public void setDimHeight(double x) {dimHeight = x;}
+    public void setDimWidth(double x) {dimWidth = x;}
     @Override
     public void reset() {
         Workspace workspace = (Workspace)app.getWorkspaceComponent();
@@ -108,7 +113,10 @@ public class DataManager implements AppDataComponent {
         borderColor = Color.BLACK;
         mapName = "";
         parentDirectory = "";
-    
+        
+        dimWidth = 802.0;
+        dimHeight = 536.0;
+        
         borderThickness = .01;
         rawMapPath = "";
     

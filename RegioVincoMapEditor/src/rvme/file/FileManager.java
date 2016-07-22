@@ -54,6 +54,7 @@ import rvme.data.SubRegion;
 import rvme.gui.Workspace;
 import saf.components.AppDataComponent;
 import saf.components.AppFileComponent;
+import static saf.settings.AppStartupConstants.FILE_PROTOCOL;
 
 /**
  *
@@ -181,6 +182,8 @@ public class FileManager implements AppFileComponent {
                 .add("coat_of_arms_image_path", dataManager.getCoatOfArmsImagePath())
                 .add("map_position_x", dataManager.getMapPositionX())
                 .add("map_position_y", dataManager.getMapPositionY())
+                .add("map_dim_w", dataManager.getDimWidth())
+                .add("map_dim_h", dataManager.getDimHeight())
                 .add("flag_image_pos_x", dataManager.getFlagImagePos().getX())
                 .add("flag_image_pos_y", dataManager.getFlagImagePos().getY())
                 .add("coa_image_pos_x", dataManager.getCoatOfArmsImagePos().getX())
@@ -345,6 +348,8 @@ public class FileManager implements AppFileComponent {
         Double coaPosY = getDataAsDouble(json, "coa_image_pos_y");
         dataManager.setCoatOfArmsImagePos(coaPosX, coaPosY);
         dataManager.setFlagImagePos(flagPosX, flagPosY);
+        
+        //Double w = getDataAsDouble(json, "")
         
         dataManager.setRegionFlagImagePath(json.getString("region_flag_image_path"));
         dataManager.setCoatOfArmsImagePath(json.getString("coat_of_arms_image_path"));
@@ -551,6 +556,14 @@ public class FileManager implements AppFileComponent {
             }
         }
         for (SubRegion sub : subregions) {
+            File fileName = new File(sub.getFlagImagePath());
+            if (!fileName.exists()) {
+                haveFlags = false;
+                break;
+            }
+        }
+        
+        for (SubRegion sub : subregions) {
             if (sub.getLeaderName()==null || sub.getLeaderName().equals("")) {
                 haveLeaders = false;
                 break;
@@ -570,6 +583,15 @@ public class FileManager implements AppFileComponent {
                 }
             }
         }
+        //asdfasdfasdfasd 
+        for (SubRegion sub : subregions) {
+            File fileName = new File(sub.getLeaderImagePath());
+            if (!fileName.exists()) {
+                haveLeaders = false;
+                break;
+            }
+        }
+        
         for (SubRegion sub : subregions) {
             if (sub.getCapitalName()==null || sub.getCapitalName().equals("")) {
                 haveCapitals = false;

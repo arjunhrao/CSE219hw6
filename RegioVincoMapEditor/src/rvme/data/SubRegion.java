@@ -62,13 +62,14 @@ public class SubRegion {
     public void setSubregionColor(Color color) {subregionColor = color;}
     public void setFlagImagePath(String s) {flagImagePath = s;}
     public void setLeaderImagePath(String s) {leaderImagePath = s;}
-    public void setLeaderName(String s) {//leaderName = s;
+    public void setLeaderName(String s, String pathToImage) {//leaderName = s;
         leader.setValue(s);
-        setLeaderImagePath("./export/The World/Europe/Andorra/" + getLeaderName() + ".png");
+        setLeaderImagePath(pathToImage + "/"+ getLeaderName() + ".png");
+    //"./export/The World/Europe/Andorra/"
     }
-    public void setSubregionName(String s) {//subregionName = s;
+    public void setSubregionName(String s, String pathToImage) {//subregionName = s;
         subregion.setValue(s);
-        setFlagImagePath("./export/The World/Europe/Andorra/" + getSubregionName() + " Flag.png");
+        setFlagImagePath(pathToImage +"/"+ getSubregionName() + " Flag.png");
     }
     
     public ArrayList<Polygon> getPolygonList() {
@@ -117,7 +118,7 @@ public class SubRegion {
     
     public void reset() {
         setCapitalName(DEFAULT_CATEGORY);
-        setLeaderName(DEFAULT_DESCRIPTION);
-        setSubregionName(DEFAULT_DESCRIPTION);
+        setLeaderName(DEFAULT_DESCRIPTION, "");
+        setSubregionName(DEFAULT_DESCRIPTION, "");
     }
 }

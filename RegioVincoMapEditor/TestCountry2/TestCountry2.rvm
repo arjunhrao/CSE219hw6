@@ -1,73 +1,73 @@
 
 {
-    "name":"TestCountry",
+    "name":"TestCountry2",
     "subregions_have_capitals":true,
     "subregions_have_flags":true,
     "subregions_have_leaders":false,
     "subregions":[
         {
-            "name":"Subregion1",
+            "name":"SUB ! ! ! ! ! ",
             "capital":"asdf",
             "leader":"adsf",
-            "red":187,
-            "green":187,
-            "blue":187
+            "red":94,
+            "green":94,
+            "blue":94
         },
         {
             "name":"Subregion2",
             "capital":"f",
-            "leader":"",
-            "red":63,
-            "green":63,
-            "blue":63
-        },
-        {
-            "name":"Subregion3",
-            "capital":"asdfcvxz",
             "leader":"",
             "red":218,
             "green":218,
             "blue":218
         },
         {
-            "name":"Subregion4",
-            "capital":"vcxz",
-            "leader":"",
-            "red":94,
-            "green":94,
-            "blue":94
-        },
-        {
-            "name":"Subregion5",
-            "capital":"z",
+            "name":"Subregion3",
+            "capital":"asdfcvxz",
             "leader":"",
             "red":1,
             "green":1,
             "blue":1
         },
         {
-            "name":"Subregion6",
-            "capital":"x",
+            "name":"Subregion4",
+            "capital":"vcxz",
+            "leader":"asdf",
+            "red":187,
+            "green":187,
+            "blue":187
+        },
+        {
+            "name":"Subregion5",
+            "capital":"z",
             "leader":"",
             "red":125,
             "green":125,
             "blue":125
         },
         {
-            "name":"Subregion7",
-            "capital":"cv",
+            "name":"Subregion6",
+            "capital":"x",
             "leader":"",
             "red":156,
             "green":156,
             "blue":156
         },
         {
-            "name":"Subregion8",
-            "capital":"v",
+            "name":"Subregion7",
+            "capital":"cv",
             "leader":"",
             "red":32,
             "green":32,
             "blue":32
+        },
+        {
+            "name":"Subregion8",
+            "capital":"v",
+            "leader":"",
+            "red":63,
+            "green":63,
+            "blue":63
         }
     ]
 }
